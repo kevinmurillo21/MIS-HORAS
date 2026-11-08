@@ -21,15 +21,15 @@ body{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 main{max-width:560px;margin:-38px auto 0;padding:0 14px}
 .card{background:var(--cd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 6px 24px #0f172a18}
 label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mu);margin:0 0 6px}
-input,select{width:100%;min-height:48px;border:1.5px solid var(--ln);background:var(--in);color:var(--tx);border-radius:14px;padding:0 12px;font:inherit}
+input,select{display:block;width:100%;max-width:100%;min-width:0;-webkit-appearance:none;appearance:none;min-height:48px;border:1.5px solid var(--ln);background:var(--in);color:var(--tx);border-radius:14px;padding:0 12px;font:inherit}
 input:focus,select:focus{outline:2px solid var(--ac);border-color:transparent}
-.hint{color:var(--mu);font-size:13px;margin-top:8px;text-transform:capitalize}.hint.n{text-transform:none}
+.hint{color:var(--mu);font-size:13px;margin-top:8px}.hint:first-letter{text-transform:uppercase}
 .seg{background:var(--in);border-radius:16px;padding:12px;margin:12px 0}
 .seg input{background:var(--cd)}
 .sh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .chip{margin-left:auto;font-size:13px;background:#0d948822;color:var(--ac);padding:3px 10px;border-radius:99px;font-weight:700}
 .chip s{color:var(--rd);font-weight:600;margin-left:5px}
-.tr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.tr>div{min-width:0}
 button{font:inherit;cursor:pointer;border:0;border-radius:14px;min-height:48px;padding:0 16px;color:var(--tx);background:none}
 .pri{flex:1;background:linear-gradient(135deg,#0d9488,#4f46e5);color:#fff;font-weight:700;font-size:17px}
 .ghost{width:100%;border:1.5px dashed var(--ln);color:var(--ac);font-weight:700;margin-top:4px}
@@ -54,6 +54,8 @@ big{display:block;font-size:19px;font-weight:800;margin-top:2px}.lost{color:var(
 .rt b{font-size:18px}
 h3{margin:0 0 10px}
 .qc{text-align:center}.qc big{font-size:28px}
+.now{float:right;min-height:26px;height:26px;padding:0 10px;font-size:12px;border-radius:99px;margin-top:-4px;background:#0d948822;color:var(--ac);font-weight:700;text-transform:none;letter-spacing:0}
+.bar{fill:var(--ac)}.lbl{fill:var(--mu);font-size:10px}.axis{stroke:var(--ln);stroke-width:1}
 .tabs{display:flex;gap:6px;margin-bottom:12px}
 .tabs button{flex:1;background:var(--cd);font-weight:700;font-size:14px;color:var(--mu);box-shadow:0 3px 10px #0f172a14;padding:0 6px}
 .tabs button.on{background:var(--ac);color:#fff}
@@ -61,13 +63,13 @@ nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--cd);box
 nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600;color:var(--mu);min-height:56px;border-radius:16px}
 nav button i{font-style:normal;font-size:22px}
 nav button.on{color:var(--ac);background:#0d948818}
-.warn{background:#f59e0b2b;color:inherit;border-radius:14px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+.warn{background:#f59e0b2b;color:inherit;border-radius:14px;padding:10px 12px;margin:46px 0 14px;font-size:14px}
 #toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:#0f172a;color:#fff;padding:10px 18px;border-radius:99px;opacity:0;transition:.25s;pointer-events:none;font-weight:600;z-index:9}
 #toast.on{opacity:1;transform:translateX(-50%)}
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const $=s=>document.querySelector(s),K='mishoras.v1';
+const VER='1.1',$=s=>document.querySelector(s),K='mishoras.v1';
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let ok=true,T='reg',S;
 try{S=JSON.parse(localStorage.getItem(K)||'null');localStorage.setItem(K+'t','1')}catch(e){ok=false}
@@ -98,8 +100,8 @@ return `<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),
 <section class="card"><label for="dt">Fecha del registro</label>
 <input type="date" id="dt" value="${D.date}"><div class="hint">${fdate(D.date)}</div>
 ${D.segs.map((g,n)=>`<div class="seg"><div class="sh"><b>Turno ${n+1}</b><span class="chip" id="c${n}"></span>${D.segs.length>1?`<button class="x" data-a="rs" data-n="${n}" aria-label="Quitar turno">✕</button>`:''}</div>
-<div class="tr"><div><label>Entrada</label><input type="time" data-f="i" data-n="${n}" value="${g.i}"></div>
-<div><label>Salida</label><input type="time" data-f="o" data-n="${n}" value="${g.o}"></div></div></div>`).join('')}
+<div class="tr"><div><label>Entrada<button class="now" data-a="now" data-n="${n}" data-f="i">Ahora</button></label><input type="time" data-f="i" data-n="${n}" value="${g.i}"></div>
+<div><label>Salida<button class="now" data-a="now" data-n="${n}" data-f="o">Ahora</button></label><input type="time" data-f="o" data-n="${n}" value="${g.o}"></div></div></div>`).join('')}
 <button class="ghost" data-a="as">＋ Agregar turno</button>
 <div class="hint n">Tu almuerzo es el espacio entre un turno y el siguiente: no se cuenta. Si la salida es menor que la entrada, se asume que pasó la medianoche.</div></section>
 <section class="card sum" id="prev"></section>
@@ -115,6 +117,16 @@ function monthKeys(q=0){const p=`${M.y}-${p2(M.m+1)}`;return Object.keys(S.days)
 function qr(y,m,q){const p=`${y}-${p2(m+1)}`;let c=0,l=0,pay=0,n=0;
  Object.keys(S.days).filter(k=>k.startsWith(p)&&(!q||qOf(k)===q)).forEach(k=>{const r=calc(S.days[k]);c+=r.c;l+=r.lost;pay+=r.c/60*rateFor(k);n++});
  return{c,l,pay,n}}
+function chart(){const N=new Date(M.y,M.m+1,0).getDate(),a=Q===2?16:1,z=Q===1?15:N,n=z-a+1,W=330,st=W/n,H=110,hs=[];
+ for(let d=a;d<=z;d++){const k=`${M.y}-${p2(M.m+1)}-${p2(d)}`;hs.push(S.days[k]?calc(S.days[k]).c/60:0)}
+ const mx=Math.max(8,Math.ceil(Math.max(...hs)));
+ const bars=hs.map((h,i)=>{const bh=h/mx*H,x=i*st+st*.18,w=st*.64,d=a+i,cx=x+w/2;
+  return `<rect class="bar" x="${x}" y="${H-bh}" width="${w}" height="${h?Math.max(bh,2):0}" rx="${Math.min(4,w/2)}"/>${n<=16&&h?`<text class="lbl" x="${cx}" y="${H-bh-4}" text-anchor="middle">${+h.toFixed(1)}</text>`:''}${n<=16||d%5===0||d===a?`<text class="lbl" x="${cx}" y="${H+14}" text-anchor="middle">${d}</text>`:''}`}).join('');
+ return `<section class="card"><h3>Horas por día</h3><svg viewBox="0 -14 ${W} ${H+34}" width="100%" role="img" aria-label="Horas por día"><line class="axis" x1="0" x2="${W}" y1="${H}" y2="${H}"/>${bars}</svg><small>Escala hasta ${mx} h</small></section>`}
+function vYear(){const y=M.y,mm=Array.from({length:12},()=>({c:0,p:0,n:0}));
+ Object.keys(S.days).filter(k=>k.startsWith(y+'-')).forEach(k=>{const r=calc(S.days[k]),i=+k.slice(5,7)-1;mm[i].c+=r.c;mm[i].p+=r.c/60*rateFor(k);mm[i].n++});
+ const T=mm.reduce((a,x)=>({c:a.c+x.c,p:a.p+x.p,n:a.n+x.n}),{c:0,p:0,n:0});if(!T.n)return '';
+ return `<section class="card"><small>Acumulado ${y}</small><big style="font-size:28px">${$$(T.p)}</big><small>${fm(T.c)} · ${T.n} ${T.n===1?'día':'días'}</small>${mm.map((x,i)=>x.n?`<div class="rt"><span>${MES[i]}</span><span>${fm(x.c)} · <b style="font-size:15px">${$$(x.p)}</b></span></div>`:'').join('')}</section>`}
 function vMes(){const ks=monthKeys(Q),t=qr(M.y,M.m,Q),a=qr(M.y,M.m,1),b=qr(M.y,M.m,2);
  const rows=ks.map(k=>{const r=calc(S.days[k]),g=r.c/60*rateFor(k);
   return `<button class="day" data-a="od" data-d="${k}"><div class="dd"><b>${k.slice(8)}</b><small>${wd(k)}</small></div><div>${fm(r.c)}<small>${S.days[k].map(x=>x.i+'–'+x.o).join(' · ')}</small></div><div class="dp">${$$(g)}</div></button>`}).join('');
@@ -122,7 +134,7 @@ function vMes(){const ks=monthKeys(Q),t=qr(M.y,M.m,Q),a=qr(M.y,M.m,1),b=qr(M.y,M
 <div class="tabs">${[[0,'Mes'],[1,'1ª quincena'],[2,'2ª quincena']].map(([v,l])=>`<button data-a="q" data-n="${v}" class="${Q===v?'on':''}">${l}</button>`).join('')}</div>
 <section class="grid"><div class="card wide"><small>${Q?`Pago de la quincena ${qL(M.y,M.m,Q)}`:'Pago aproximado del mes'}</small><big>${$$(t.pay)}</big>${Q?'':`<small>1ª (${qL(M.y,M.m,1)}): ${$$(a.pay)} · 2ª (${qL(M.y,M.m,2)}): ${$$(b.pay)}</small>`}</div>
 <div class="card"><small>Horas</small><big>${fm(t.c)}</big></div><div class="card"><small>Días</small><big>${t.n}</big></div><div class="card"><small>No contadas</small><big class="lost">${fm(t.l)}</big></div></section>
-${rows||'<p class="empty">Aún no hay registros en este mes</p>'}${ks.length?'<button class="ghost" data-a="csv">Exportar este mes (CSV)</button>':''}`}
+${ks.length?chart():''}${rows||'<p class="empty">Aún no hay registros en este mes</p>'}${vYear()}${ks.length?'<button class="ghost" data-a="csv">Exportar este mes (CSV)</button>':''}`}
 
 function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1);
  return `<section class="card"><h3>Valor por hora</h3>${rs.map(r=>`<div class="rt"><div><b>${$$(r.rate)}</b><small>${r.from==='2000-01-01'?'Tarifa inicial':'Desde '+fdate(r.from)}</small></div>${rs.length>1?`<button class="x" data-a="dr" data-d="${r.from}" aria-label="Borrar tarifa">✕</button>`:''}</div>`).join('')}
@@ -134,7 +146,8 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1);
 <label style="margin-top:12px">Se aplica a</label><select id="md"><option value="seg" ${S.mode==='seg'?'selected':''}>Cada turno (entrada a huella de cierre)</option><option value="day" ${S.mode==='day'?'selected':''}>El total del día</option></select>
 <div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div></section>
 <section class="card"><h3>Respaldo</h3><div class="row" style="margin:0"><button class="ghost" style="margin:0" data-a="ex">Exportar</button><button class="ghost" style="margin:0" data-a="im">Importar</button></div>
-<input type="file" id="fi" accept=".json,application/json" hidden><div class="hint n">Tus datos viven solo en este teléfono. Exporta un respaldo de vez en cuando.</div></section>`}
+<input type="file" id="fi" accept=".json,application/json" hidden><div class="hint n">Tus datos viven solo en este teléfono. Exporta un respaldo de vez en cuando.</div></section>
+<p class="hint n" style="text-align:center">Mis Horas · versión ${VER}</p>`}
 
 function R(){const n=new Date();
  $('#app').innerHTML=`<header class="hero"><div class="dow">${n.toLocaleDateString('es-CO',{weekday:'long'})}</div><div class="big">${n.getDate()} de ${MES[n.getMonth()].toLowerCase()}</div><div class="yr">${n.getFullYear()} · <span id="clk"></span></div></header>
@@ -156,6 +169,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
   S.days[D.date]=s;sv();D.segs=s.map(x=>({...x}));R();toast('Día guardado ✓')}
  else if(a==='del'){if(confirm('¿Borrar este día?')){delete S.days[D.date];sv();openDay(D.date);R()}}
  else if(a==='od'){openDay(b.dataset.d);T='reg';R();scrollTo(0,0)}
+ else if(a==='now'){const d=new Date();D.segs[n][b.dataset.f]=p2(d.getHours())+':'+p2(d.getMinutes());R()}
  else if(a==='q'){Q=n;R()}
  else if(a==='pm'){M.m--;if(M.m<0){M.m=11;M.y--}R()}
  else if(a==='nm'){M.m++;if(M.m>11){M.m=0;M.y++}R()}
