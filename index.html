@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8">
+<html lang="es" class="nt"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f766e"><title>Mis Horas</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -98,6 +98,45 @@ main.an .pg i{animation:fillw .9s ease both}
 .cmr{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin-top:10px}.cmr b{display:block;font-size:18px}
 .cmd{font-weight:800;font-size:15px;padding:8px 10px;border-radius:14px}.cmd small{color:inherit;font-weight:700}
 .cmd.up{color:#059669;background:#05966922}.cmd.dn{color:#e11d48;background:#e11d4822}
+@property --bg{syntax:"<color>";inherits:true;initial-value:#888}
+@property --cd{syntax:"<color>";inherits:true;initial-value:#888}
+@property --tx{syntax:"<color>";inherits:true;initial-value:#888}
+@property --mu{syntax:"<color>";inherits:true;initial-value:#888}
+@property --ln{syntax:"<color>";inherits:true;initial-value:#888}
+@property --in{syntax:"<color>";inherits:true;initial-value:#888}
+@property --ac{syntax:"<color>";inherits:true;initial-value:#888}
+@property --a1{syntax:"<color>";inherits:true;initial-value:#888}
+@property --a2{syntax:"<color>";inherits:true;initial-value:#888}
+@property --t1{syntax:"<color>";inherits:true;initial-value:#888}
+@property --t2{syntax:"<color>";inherits:true;initial-value:#888}
+@property --t3{syntax:"<color>";inherits:true;initial-value:#888}
+:root{transition:--bg .5s,--cd .5s,--tx .5s,--mu .5s,--ln .5s,--in .5s,--ac .5s,--a1 .5s,--a2 .5s,--t1 .5s,--t2 .5s,--t3 .5s}:root.nt{transition:none!important}
+nav{background:color-mix(in srgb,var(--cd) 72%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px)}
+nav button{position:relative;z-index:1}nav button.on{background:none}
+.pill{position:absolute;left:8px;top:6px;bottom:calc(6px + env(safe-area-inset-bottom,0px));width:calc((100% - 28px)/3);border-radius:16px;background:var(--t2);transform:translateX(calc(var(--x)*(100% + 6px)));transition:transform .45s cubic-bezier(.3,.8,.3,1.1)}
+.topb{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;background:var(--cd);background:color-mix(in srgb,var(--cd) 72%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);box-shadow:0 4px 20px #0f172a1a;transform:translateY(-110%);transition:transform .3s cubic-bezier(.2,.8,.3,1)}
+.topb.on{transform:none}.topb b{font-size:16px}.topb span{color:var(--mu);font-variant-numeric:tabular-nums}
+html,body{overflow-x:hidden}
+@keyframes slr{from{opacity:0;transform:translateX(34px)}}@keyframes slx{from{opacity:0;transform:translateX(-34px)}}
+main.an.to-r{animation:slr .4s cubic-bezier(.2,.7,.2,1) both}main.an.to-l{animation:slx .4s cubic-bezier(.2,.7,.2,1) both}
+main.to-r>*,main.to-l>*{animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #e11d4866}70%{box-shadow:0 0 0 18px #e11d4800}100%{box-shadow:0 0 0 0 #e11d4800}}
+@keyframes mkpop{from{transform:scale(.94);filter:brightness(1.25)}}
+.mkb{position:relative;overflow:hidden}.mkb.out{animation:pulse 2.2s infinite}.mkb.pop{animation:mkpop .4s ease}.mkb.out.pop{animation:mkpop .4s ease,pulse 2.2s .4s infinite}
+.rip{position:absolute;border-radius:50%;background:#ffffff55;transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}@keyframes rip{to{transform:scale(2.4);opacity:0}}
+.ring{position:relative;width:120px;height:120px;margin:12px auto 0}.ring svg{width:120px;height:120px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}.rt0{stroke:var(--in)}.rt1{stroke:var(--ac);transition:stroke-dashoffset 1s linear,stroke .3s}.ring.late .rt1{stroke:var(--rd)}
+.rtx{position:absolute;inset:0;display:grid;place-items:center;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.ckfx{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:20;animation:ckf 1s ease forwards}.ckfx svg{width:96px;height:96px;filter:drop-shadow(0 10px 30px #0006)}
+.ckfx circle{fill:var(--ac);transform-box:fill-box;transform-origin:center;animation:ckp .35s cubic-bezier(.2,.9,.3,1.3) both}
+.ckfx path{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:44;stroke-dashoffset:44;animation:ckd .4s .2s ease forwards}
+@keyframes ckp{from{transform:scale(0)}}@keyframes ckd{to{stroke-dashoffset:0}}@keyframes ckf{0%,70%{opacity:1}100%{opacity:0}}
+.shk{animation:shk .4s}@keyframes shk{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.cfw{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:30}.cfw i{position:absolute;top:-14px;width:8px;height:14px;border-radius:2px;animation:cfall 2s ease-in both}@keyframes cfall{to{transform:translate(var(--dx),105vh) rotate(var(--r))}}
+.dg{display:inline-block;height:1em;overflow:hidden;vertical-align:bottom;line-height:1}
+.st{display:flex;flex-direction:column;transform:translateY(calc(var(--n)*-1em));animation:roll 1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--k)*55ms)}
+.st i{font-style:normal;display:block;height:1em;line-height:1}@keyframes roll{from{transform:translateY(0)}}
+.gs{margin:12px 0 0;padding-left:20px}.gs li{margin:8px 0}
 .sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sb{min-height:56px;border-radius:14px;color:#fff;font-weight:700;font-size:13px;text-shadow:0 1px 3px #0006;border:3px solid transparent}.sb.on{border-color:var(--tx)}
 input[type=color]{padding:4px}
 .bar{fill:var(--ac)}.lbl{fill:var(--mu);font-size:10px}.axis{stroke:var(--ln);stroke-width:1}
@@ -114,13 +153,13 @@ nav button.on{color:var(--ac);background:var(--t2)}
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const VER='1.5',$=s=>document.querySelector(s),K='mishoras.v1';
+const VER='1.6',$=s=>document.querySelector(s),K='mishoras.v1';
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let ok=true,T='reg',S;
 try{S=JSON.parse(localStorage.getItem(K)||'null');localStorage.setItem(K+'t','1')}catch(e){ok=false}
 S=S||{days:{},rates:[{from:'2000-01-01',rate:0}],step:30,mode:'seg'};
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fix=()=>{S.notes=S.notes||{};S.seen=S.seen||{};if(S.lunch===undefined)S.lunch=60;if(S.onbDone===undefined)S.onbDone=!!(Object.keys(S.days||{}).length||S.name||(S.rates||[]).some(r=>r.rate>0));S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
+const fix=()=>{S.notes=S.notes||{};S.seen=S.seen||{};S.goalHit=S.goalHit||{};if(S.lunch===undefined)S.lunch=60;if(S.onbDone===undefined)S.onbDone=!!(Object.keys(S.days||{}).length||S.name||(S.rates||[]).some(r=>r.rate>0));S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
 const sv=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){ok=false}};
 const p2=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
 const today=()=>iso(new Date()),dt=k=>new Date(+k.slice(0,4),+k.slice(5,7)-1,+k.slice(8));
@@ -144,7 +183,7 @@ function openDay(d){const f=S.drafts[d];D=f?{date:d,note:f.note||'',segs:f.segs.
 function toast(t){const e=$('#toast');e.textContent=t;e.className='on';clearTimeout(toast.h);toast.h=setTimeout(()=>e.className='',1800)}
 
 function vReg(){const n=new Date(),q=n.getDate()<=15?1:2,t=qr(n.getFullYear(),n.getMonth(),q);
-return `${bk()}${dr()}${mk()}${onb()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}${projL()}</section>
+return `${bk()}${dr()}${gd()}${mk()}${onb()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}${projL()}</section>
 <section class="card"><label for="dt">Fecha del registro</label>
 <input type="date" id="dt" value="${D.date}"><div class="hint">${fdate(D.date)}</div>
 ${D.segs.map((g,n)=>`<div class="seg"><div class="sh"><b>Turno ${n+1}</b><span class="chip" id="c${n}"></span>${D.segs.length>1?`<button class="x" data-a="rs" data-n="${n}" aria-label="Quitar turno">✕</button>`:''}</div>
@@ -175,9 +214,10 @@ function theme(){const t=S.th||PRE[0],r=document.documentElement,c=t.ac||t.a1,m=
  if(m)m.content=t.a1;document.body.style.zoom=({n:1,g:1.12,x:1.25})[S.fs||'n']||1}
 const ft=t=>{if(!S.h12)return t;const h=+t.slice(0,2);return `${h%12||12}:${t.slice(3)} ${h<12?'a. m.':'p. m.'}`};
 const op=(a,cur)=>a.map(([v,l])=>`<option value="${v}" ${String(cur)===v?'selected':''}>${l}</option>`).join('');
-let NV=false,ANIM=true;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function cu(){if(RM)return;document.querySelectorAll('.cu').forEach(e=>{const to=+e.textContent.replace(/\D/g,'');if(!to)return;const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/700);e.textContent=$r(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
-const NOV=[{v:'1.5',t:'Marcar, comparar y proyectar',i:['Botón para marcar entrada y salida','Cuenta regresiva del almuerzo','Comparación con la quincena o el mes anterior','Proyección al cierre de la quincena','Gráfica por semana y promedios','Invitar amigos con un toque']},{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
+let NV=false,ANIM=true,PT=0,DIR='',POPM=false;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function cu(){if(RM)return;document.querySelectorAll('.cu').forEach(e=>{const t=e.textContent;if(!/\d/.test(t))return;let k=0;e.setAttribute('aria-label',t);
+ e.innerHTML=[...t].map(c=>/\d/.test(c)?`<span class="dg" aria-hidden="true"><span class="st" style="--n:${c};--k:${k++}">${'0123456789'.split('').map(x=>`<i>${x}</i>`).join('')}</span></span>`:`<span aria-hidden="true">${c}</span>`).join('')})}
+const NOV=[{v:'1.6',t:'Más fluida y premium',i:['Pantallas que se deslizan y barra inferior con píldora animada','Efecto cristal y barra superior compacta al bajar','Botón de marcar con pulso, onda y anillo del almuerzo','Confirmación animada al guardar y confeti al cumplir la meta','Cifras que giran y cambio de tema suave','Guía para instalar la app en iPhone y Android']},{v:'1.5',t:'Marcar, comparar y proyectar',i:['Botón para marcar entrada y salida','Cuenta regresiva del almuerzo','Comparación con la quincena o el mes anterior','Proyección al cierre de la quincena','Gráfica por semana y promedios','Invitar amigos con un toque']},{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
 const dsc=()=>S.ds+S.dp;
 const netL=p=>dsc()?`<small>Neto aprox.: ${$$(p*(1-dsc()/100))} · descuentos ${dsc()}%</small>`:'';
 function goal(c){if(!S.goal)return '';const g=S.goal*60,pc=Math.min(100,Math.round(c/g*100)),f=g-c;return `<div class="pg"><i style="width:${pc}%"></i></div><small>Meta ${S.goal} h · ${f>0?`faltan ${fm(f)}`:'¡meta cumplida!'}</small>`}
@@ -198,17 +238,17 @@ function doSave(){const s=D.segs.filter(g=>g.i&&g.o&&g.i!==g.o),rest=D.segs.filt
 function mkInfo(){for(const k of Object.keys(S.drafts).sort().reverse()){const f=S.drafts[k],i=f.segs.findIndex(g=>g.i&&!g.o);
   if(i>=0&&Date.now()-new Date(`${k}T${f.segs[i].i}:00`)<18*36e5)return{open:true,date:k,idx:i,since:f.segs[i].i}}
  return{open:false}}
-function mk(){const m=mkInfo();return `<section class="card mk"><button class="mkb ${m.open?'out':'in'}" data-a="mk"><span>${m.open?'■':'▶'}</span>${m.open?'Marcar salida':'Marcar entrada'}</button><div class="mks" id="mks"></div><div class="pg" id="mkp" style="display:none"><i></i></div></section>`}
-function mkTick(){const e=$('#mks');if(!e)return;const m=mkInfo(),p=$('#mkp');let h='',pr=null;
+function mk(){const m=mkInfo();return `<section class="card mk"><button class="mkb ${m.open?'out':'in'}${POPM?' pop':''}" data-a="mk"><span>${m.open?'■':'▶'}</span>${m.open?'Marcar salida':'Marcar entrada'}</button><div class="mks" id="mks"></div><div class="ring" id="mkr" style="display:none"><svg viewBox="0 0 120 120"><circle class="rt0" cx="60" cy="60" r="52"/><circle class="rt1" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><div class="rtx"></div></div></section>`}
+function mkTick(){const e=$('#mks');if(!e)return;const m=mkInfo(),rg=$('#mkr');let h='',ring=null;
  const hoy=()=>{const c=S.days[today()]?calc(S.days[today()]).c:0;return c?`Hoy llevas <b>${fm(c)}</b> contadas`:'Toca el botón para marcar tu hora'};
  if(m.open){const mn=Math.max(0,Math.floor((Date.now()-new Date(`${m.date}T${m.since}:00`))/6e4));h=`En turno desde <b>${ft(m.since)}</b> · lleva <b>${fm(mn)}</b>`}
  else if(S.lastOut&&S.lunch>0){const el=(Date.now()-S.lastOut.t)/1000,L=S.lunch*60,rem=L-el;
-  if(rem>0){h=`🍽 Almuerzo · quedan <b>${mmss(rem)}</b> <button class="lnk" data-a="mkend">Terminé el día</button>`;pr=el/L*100}
-  else if(rem>-1800){h=`⚠ Te pasaste <b>${fm(Math.ceil(-rem/60))}</b> del almuerzo <button class="lnk" data-a="mkend">Terminé el día</button>`;pr=100}
+  if(rem>0){h=`🍽 Almuerzo · <button class="lnk" data-a="mkend">Terminé el día</button>`;ring={f:el/L,t:mmss(rem),late:0}}
+  else if(rem>-1800){h=`⚠ Te pasaste del almuerzo · <button class="lnk" data-a="mkend">Terminé el día</button>`;ring={f:0,t:'+'+mmss(-rem),late:1}}
   else h=hoy()}
  else h=hoy();
  if(e.dataset.h!==h){e.innerHTML=h;e.dataset.h=h}
- if(p){p.style.display=pr===null?'none':'block';if(pr!==null)p.firstChild.style.width=Math.min(100,pr)+'%'}}
+ if(rg){rg.style.display=ring?'block':'none';if(ring){rg.classList.toggle('late',!!ring.late);rg.querySelector('.rt1').style.strokeDashoffset=326.7*ring.f;rg.querySelector('.rtx').textContent=ring.t}}}
 function proj(){const n=new Date(),y=n.getFullYear(),m=n.getMonth(),q=n.getDate()<=15?1:2,N=new Date(y,m+1,0).getDate(),end=q===1?15:N,t=qr(y,m,q);
  const days=Object.keys(S.days).filter(k=>dt(k)<=n&&n-dt(k)<=28*864e5);if(days.length<3)return null;
  const wk=Array(7).fill(0);let mins=0;days.forEach(k=>{wk[dt(k).getDay()]++;mins+=calc(S.days[k]).c});
@@ -237,6 +277,26 @@ function wkc(){const ks=monthKeys(Q);if(!ks.length)return '';
   return `<rect class="bar" style="animation-delay:${i*60}ms" x="${x}" y="${H-bh}" width="${bw}" height="${h?Math.max(bh,2):0}" rx="8"/>${h?`<text class="lbl" x="${cx}" y="${H-bh-5}" text-anchor="middle">${+h.toFixed(1)}</text>`:''}<text class="lbl" x="${cx}" y="${H+14}" text-anchor="middle">${w.l}</text>`}).join('');
  return `<section class="card"><h3>Por semana</h3><svg viewBox="0 -14 ${W} ${H+34}" width="100%" role="img" aria-label="Horas por semana"><line class="axis" x1="0" x2="${W}" y1="${H}" y2="${H}"/>${bars}</svg><small>Horas contadas por semana</small>
 <div class="sum" style="margin-top:12px"><div><small>Promedio por día</small><big>${fm(Math.round(tot/ks.length))}</big></div><div><small>Promedio por semana</small><big>${fm(Math.round(tot/nw))}</big></div><div><small>Mejor día</small><big style="font-size:16px;text-transform:capitalize">${bi>=0?DN[bi]:'—'}</big></div></div></section>`}
+function ripple(b,e){const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),i=document.createElement('i');i.className='rip';i.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),650)}
+function doMark(){const m=mkInfo(),now=new Date(),hm=p2(now.getHours())+':'+p2(now.getMinutes());POPM=true;
+ if(m.open){openDay(m.date);D.segs[m.idx].o=hm;S.lastOut={t:Date.now()};doSave();R();checkFx();goalFx();toast('Salida marcada ✓ · '+ft(hm))}
+ else{openDay(today());const e=D.segs.findIndex(g=>!g.i&&!g.o);if(e>=0)D.segs[e].i=hm;else D.segs.push({i:hm,o:''});S.lastOut=null;saveDraft();R();toast('Entrada marcada ✓ · '+ft(hm))}}
+function checkFx(){if(RM)return;const d=document.createElement('div');d.className='ckfx';d.innerHTML='<svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M14 27l8 8 16-17"/></svg>';document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
+function shake(){document.querySelectorAll('.seg').forEach(x=>{x.classList.remove('shk');void x.offsetWidth;x.classList.add('shk')})}
+function confetti(){if(RM)return;const w=document.createElement('div');w.className='cfw';const cs=['#f59e0b','#10b981','#3b82f6','#ec4899','#8b5cf6','#ef4444'];
+ for(let i=0;i<34;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${cs[i%6]};--dx:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg;animation-delay:${Math.random()*.4}s;animation-duration:${1.6+Math.random()*1.2}s`;w.appendChild(p)}
+ document.body.appendChild(w);setTimeout(()=>w.remove(),3400)}
+function goalFx(){if(!S.goal)return;const n=new Date(),q=n.getDate()<=15?1:2,k=`${n.getFullYear()}-${n.getMonth()}-${q}`;
+ if(S.goalHit[k])return;if(qr(n.getFullYear(),n.getMonth(),q).c>=S.goal*60){S.goalHit[k]=1;sv();confetti();setTimeout(()=>toast('¡Meta de la quincena cumplida! 🎉'),700)}}
+const inApp=()=>navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+const plat=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'ios':/Android/.test(navigator.userAgent)?'and':'pc';
+let DP=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e;if(!S.guideOff&&!inApp()&&T==='reg')R()});
+const SH='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M12 3v12M8 7l4-4 4 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>';
+function steps(){const p=plat();
+ if(p==='ios')return `<ol class="gs"><li><b>Toca Compartir</b> ${SH} en la barra de Safari</li><li>Baja y elige <b>Añadir a pantalla de inicio</b></li><li>Toca <b>Añadir</b> y ábrela desde su ícono</li></ol><div class="hint n">Hazlo desde Safari. Si estás en otro navegador, copia el link y ábrelo en Safari.</div>`;
+ if(p==='and')return `${DP?'<button class="pri" style="width:100%;margin-bottom:10px" data-a="gi">Instalar ahora</button>':''}<ol class="gs"><li>Toca los <b>tres puntos ⋮</b> de Chrome</li><li>Elige <b>Instalar app</b> o <b>Añadir a pantalla de inicio</b></li><li>Confirma y ábrela desde su ícono</li></ol>`;
+ return `<ol class="gs"><li>Abre este link en tu celular: <b>${esc(appUrl())}</b></li><li>En el celular, sigue los pasos que te muestra la app para añadirla a la pantalla de inicio</li></ol><div class="row" style="margin:0"><button class="ghost" style="margin:0" data-a="cpl">Copiar link</button></div>`}
+function gd(){if(S.guideOff||inApp()||plat()==='pc')return '';return `<section class="card gd"><div class="obh"><b>📲 Instala la app en tu celular</b><button class="lnk" data-a="gx">Ahora no</button></div><small>Se abre como una app y funciona sin internet.</small>${steps()}</section>`}
 function dr(){const o=Object.keys(S.drafts).filter(k=>k!==D.date).sort();return o.length?`<div class="warn">✏️ Registro sin guardar: ${o.map(k=>`<button class="lnk" data-a="od" data-d="${k}">${k.slice(8)}/${k.slice(5,7)}</button>`).join(' · ')}</div>`:''}
 function cal(){const y=M.y,m=M.m,N=new Date(y,m+1,0).getDate(),off=(new Date(y,m,1).getDay()+(S.sun?0:6))%7,td=today();let h='';
  for(let i=0;i<off;i++)h+='<i></i>';
@@ -297,6 +357,7 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
  +acc('regla','⏱','Regla de la empresa',`Bloques de ${S.step===1?'tiempo exacto':S.step===60?'1 hora':S.step+' min'} · ${S.mode==='seg'?'por turno':'por día'}`,regla)
  +acc('look','🎨','Apariencia',`${t.n||'Personalizado'} · ${({auto:'Automático',light:'Claro',dark:'Oscuro'})[S.look||'auto']}`,look)
  +acc('pers','👤','Personalizar',S.name?esc(S.name):'Nombre, hora, tamaño y montos',pers)
+ +acc('inst','📲','Instalar la app',inApp()?'Ya está instalada ✓':'Cómo añadirla a tu pantalla de inicio',inApp()?'<div class="hint n">Ya la estás usando como app. Si un amigo quiere instalarla, usa Invitar amigos.</div>':steps())
  +acc('inv','🎁','Invitar amigos','Comparte la app con un toque',inv)
  +acc('resp','💾','Respaldo',S.lastBackup?'Último: '+new Date(S.lastBackup).toLocaleDateString('es-CO',{day:'numeric',month:'short'}):'Aún sin respaldo',resp)
  +acc('nov','✨','Novedades',`Versión ${NOV[0].v} · ${NOV[0].t}`,tl,'ab0')
@@ -304,29 +365,30 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
 
 function R(){const n=new Date();
  $('#app').innerHTML=`<header class="hero">${S.hide?`<button class="eye" data-a="eye" aria-label="Ver montos">${REV?'🙈':'👁'}</button>`:''}<div class="dow">${S.name?'Hola, '+esc(S.name)+' · ':''}${n.toLocaleDateString('es-CO',{weekday:'long'})}</div><div class="big">${n.getDate()} de ${MES[n.getMonth()].toLowerCase()}</div><div class="yr">${n.getFullYear()} · <span id="clk"></span></div></header>
-<main${ANIM?' class="an"':''}>${rateFor(today())||!S.onbDone?'':'<div class="warn">Primero pon tu valor por hora. <button class="lnk" data-a="ob" data-s="pago">Configurar</button></div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
-<nav>${[['reg','⏱','Registrar'],['mes','📅','Mes'],['cfg','⚙️','Ajustes']].map(([t,i,l])=>`<button data-a="t" data-t="${t}" class="${T===t?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav>`;
- if(T==='reg')paint();clock();if(ANIM)cu();ANIM=false}
-function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12});mkTick()}
+<div class="topb" id="topb"><b>${n.getDate()} de ${MES[n.getMonth()].toLowerCase()}</b><span id="tbc"></span></div>
+<main${ANIM?` class="an ${DIR}"`:''}>${rateFor(today())||!S.onbDone?'':'<div class="warn">Primero pon tu valor por hora. <button class="lnk" data-a="ob" data-s="pago">Configurar</button></div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
+<nav><i class="pill" style="--x:${PT}"></i>${[['reg','⏱','Registrar'],['mes','📅','Mes'],['cfg','⚙️','Ajustes']].map(([t,i,l])=>`<button data-a="t" data-t="${t}" class="${T===t?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav>`;
+ if(T==='reg')paint();clock();if(ANIM)cu();ANIM=false;DIR='';POPM=false;const ti=({reg:0,mes:1,cfg:2})[T],pl=$('.pill'),tb=$('#topb');if(pl&&PT!==ti)requestAnimationFrame(()=>requestAnimationFrame(()=>pl.style.setProperty('--x',ti)));PT=ti;if(tb)tb.classList.toggle('on',scrollY>110)}
+function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12});const c=$('#tbc');if(c)c.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:!!S.h12});mkTick()}
 setInterval(clock,1000);
 
 function dl(name,txt,type){try{const f=new File([txt],name,{type});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(()=>{});return}}catch(e){}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
 function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.days||!d.rates)throw 0;
  if(confirm('Esto reemplazará lo que tienes ahora. ¿Continuar?')){S=d;fix();S.lastBackup=Date.now();sv();openDay(today());R();toast('Respaldo cargado ✓')}}catch(e){toast('Archivo no válido')}};r.readAsText(f)}
 
-document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,n=+b.dataset.n;if(['t','pm','nm','q','od'].includes(a))ANIM=true;
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,n=+b.dataset.n;if(['t','pm','nm','q','od'].includes(a)){ANIM=true;const ni=({reg:0,mes:1,cfg:2})[b.dataset.t];DIR=a==='t'?(ni>PT?'to-r':ni<PT?'to-l':''):a==='pm'?'to-l':a==='nm'?'to-r':''}
  if(a==='t'){T=b.dataset.t;R();scrollTo(0,0)}
  else if(a==='as'){D.segs.push({i:'',o:''});saveDraft();R()}
  else if(a==='rs'){D.segs.splice(n,1);saveDraft();R()}
- else if(a==='save'){const s=D.segs.filter(g=>g.i&&g.o&&g.i!==g.o),rest=D.segs.filter(g=>(g.i||g.o)&&!(g.i&&g.o&&g.i!==g.o));if(!s.length)return toast('Pon entrada y salida');
-  S.days[D.date]=s;const nt=D.note.trim();if(nt)S.notes[D.date]=nt;else delete S.notes[D.date];if(rest.length)S.drafts[D.date]={note:D.note,segs:[...s,...rest].map(x=>({...x}))};else delete S.drafts[D.date];sv();D.segs=(rest.length?[...s,...rest]:s).map(x=>({...x}));R();toast(rest.length?'Guardado ✓ · falta la salida del último turno':'Día guardado ✓')}
+ else if(a==='save'){const s=D.segs.filter(g=>g.i&&g.o&&g.i!==g.o),rest=D.segs.filter(g=>(g.i||g.o)&&!(g.i&&g.o&&g.i!==g.o));if(!s.length){shake();return toast('Pon entrada y salida')}
+  S.days[D.date]=s;const nt=D.note.trim();if(nt)S.notes[D.date]=nt;else delete S.notes[D.date];if(rest.length)S.drafts[D.date]={note:D.note,segs:[...s,...rest].map(x=>({...x}))};else delete S.drafts[D.date];sv();D.segs=(rest.length?[...s,...rest]:s).map(x=>({...x}));R();checkFx();goalFx();toast(rest.length?'Guardado ✓ · falta la salida del último turno':'Día guardado ✓')}
  else if(a==='del'){if(confirm('¿Borrar este día?')){delete S.days[D.date];delete S.notes[D.date];delete S.drafts[D.date];sv();openDay(D.date);R()}}
  else if(a==='od'){openDay(b.dataset.d);T='reg';R();scrollTo(0,0)}
  else if(a==='now'){const d=new Date();D.segs[n][b.dataset.f]=p2(d.getHours())+':'+p2(d.getMinutes());saveDraft();R()}
  else if(a==='nv'){NV=!NV;const m=$('#nvm');if(m)m.classList.toggle('open',NV);b.setAttribute('aria-expanded',NV);const c=b.querySelector('.nvc');if(c)c.textContent=NV?'Ocultar':'Leer más'}
- else if(a==='mk'){const m=mkInfo(),now=new Date(),hm=p2(now.getHours())+':'+p2(now.getMinutes());
-  if(m.open){openDay(m.date);D.segs[m.idx].o=hm;S.lastOut={t:Date.now()};doSave();R();toast('Salida marcada ✓ · '+ft(hm))}
-  else{openDay(today());const e=D.segs.findIndex(g=>!g.i&&!g.o);if(e>=0)D.segs[e].i=hm;else D.segs.push({i:hm,o:''});S.lastOut=null;saveDraft();R();toast('Entrada marcada ✓ · '+ft(hm))}}
+ else if(a==='mk'){ripple(b,e);setTimeout(doMark,170)}
+ else if(a==='gx'){S.guideOff=true;sv();R()}
+ else if(a==='gi'){if(DP){DP.prompt();DP.userChoice.finally(()=>{DP=null;R()})}}
  else if(a==='mkend'){S.lastOut=null;sv();mkTick()}
  else if(a==='inv'){const x=`¡Hola! Te comparto *Mis Horas* 📲, una app para llevar la cuenta de tus horas de trabajo y calcular tu pago por quincena. Funciona sin internet y tus datos se quedan solo en tu celular.\n\n🍎 iPhone: abre el link en Safari → Compartir → "Añadir a pantalla de inicio".\n🤖 Android: abre el link en Chrome → tres puntos → "Instalar app".\n\n${appUrl()}`;
   if(navigator.share)navigator.share({text:x}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(x).then(()=>toast('Invitación copiada ✓'))}
@@ -365,7 +427,8 @@ document.addEventListener('change',e=>{const t=e.target;
  else if(t.id==='c1'||t.id==='c2'){const b={...(S.th||PRE[0]),n:'Personalizado'};if(t.id==='c1'){b.a1=t.value;b.ac=t.value}else b.a2=t.value;S.th=b;sv();theme();R()}
  else if(t.id==='ds'||t.id==='dp'||t.id==='gl'){S[t.id==='gl'?'goal':t.id]=Math.max(0,+t.value||0);sv();R()}
  else if(t.id==='fi')imp(t.files[0])});
-theme();R();
+addEventListener('scroll',()=>{const t=$('#topb');if(t)t.classList.toggle('on',scrollY>110)},{passive:true});
+theme();R();requestAnimationFrame(()=>requestAnimationFrame(()=>document.documentElement.classList.remove('nt')));
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 </script></body></html>
