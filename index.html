@@ -85,6 +85,12 @@ main.an .cd{animation:pop .4s cubic-bezier(.2,.8,.3,1.2) both;animation-delay:ca
 main.an .bar{transform-box:fill-box;transform-origin:50% 100%;animation:grow .6s cubic-bezier(.2,.8,.3,1) both}
 main.an .pg i{animation:fillw .9s ease both}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.ab{padding:2px 16px 16px}.ab0{padding:0}.ab h4{margin:16px 0 8px;font-size:12px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}.ab h4:first-child{margin-top:4px}
+.ob{padding:16px}.obh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.ob .pg{margin:8px 0 4px}
+.ob-i{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:0 12px;min-height:50px;border-radius:14px;background:var(--in);margin-top:8px;font-weight:600}
+.ob-i span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--cd);font-size:15px;flex:none}
+.ob-i em{margin-left:auto;font-style:normal;color:var(--mu);font-size:20px}
+.ob-i.ok{opacity:.6}.ob-i.ok span{background:var(--ac);color:#fff;font-weight:700}
 .sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sb{min-height:56px;border-radius:14px;color:#fff;font-weight:700;font-size:13px;text-shadow:0 1px 3px #0006;border:3px solid transparent}.sb.on{border-color:var(--tx)}
 input[type=color]{padding:4px}
 .bar{fill:var(--ac)}.lbl{fill:var(--mu);font-size:10px}.axis{stroke:var(--ln);stroke-width:1}
@@ -101,13 +107,13 @@ nav button.on{color:var(--ac);background:var(--t2)}
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const VER='1.3.1',$=s=>document.querySelector(s),K='mishoras.v1';
+const VER='1.4',$=s=>document.querySelector(s),K='mishoras.v1';
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let ok=true,T='reg',S;
 try{S=JSON.parse(localStorage.getItem(K)||'null');localStorage.setItem(K+'t','1')}catch(e){ok=false}
 S=S||{days:{},rates:[{from:'2000-01-01',rate:0}],step:30,mode:'seg'};
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fix=()=>{S.notes=S.notes||{};S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
+const fix=()=>{S.notes=S.notes||{};S.seen=S.seen||{};if(S.onbDone===undefined)S.onbDone=!!(Object.keys(S.days||{}).length||S.name||(S.rates||[]).some(r=>r.rate>0));S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
 const sv=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){ok=false}};
 const p2=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
 const today=()=>iso(new Date()),dt=k=>new Date(+k.slice(0,4),+k.slice(5,7)-1,+k.slice(8));
@@ -131,7 +137,7 @@ function openDay(d){const f=S.drafts[d];D=f?{date:d,note:f.note||'',segs:f.segs.
 function toast(t){const e=$('#toast');e.textContent=t;e.className='on';clearTimeout(toast.h);toast.h=setTimeout(()=>e.className='',1800)}
 
 function vReg(){const n=new Date(),q=n.getDate()<=15?1:2,t=qr(n.getFullYear(),n.getMonth(),q);
-return `${bk()}${dr()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}</section>
+return `${bk()}${dr()}${onb()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}</section>
 <section class="card"><label for="dt">Fecha del registro</label>
 <input type="date" id="dt" value="${D.date}"><div class="hint">${fdate(D.date)}</div>
 ${D.segs.map((g,n)=>`<div class="seg"><div class="sh"><b>Turno ${n+1}</b><span class="chip" id="c${n}"></span>${D.segs.length>1?`<button class="x" data-a="rs" data-n="${n}" aria-label="Quitar turno">✕</button>`:''}</div>
@@ -164,13 +170,17 @@ const ft=t=>{if(!S.h12)return t;const h=+t.slice(0,2);return `${h%12||12}:${t.sl
 const op=(a,cur)=>a.map(([v,l])=>`<option value="${v}" ${String(cur)===v?'selected':''}>${l}</option>`).join('');
 let NV=false,ANIM=true;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function cu(){if(RM)return;document.querySelectorAll('.cu').forEach(e=>{const to=+e.textContent.replace(/\D/g,'');if(!to)return;const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/700);e.textContent=$r(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
-const NOV=[{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
+const NOV=[{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
 const dsc=()=>S.ds+S.dp;
 const netL=p=>dsc()?`<small>Neto aprox.: ${$$(p*(1-dsc()/100))} · descuentos ${dsc()}%</small>`:'';
 function goal(c){if(!S.goal)return '';const g=S.goal*60,pc=Math.min(100,Math.round(c/g*100)),f=g-c;return `<div class="pg"><i style="width:${pc}%"></i></div><small>Meta ${S.goal} h · ${f>0?`faltan ${fm(f)}`:'¡meta cumplida!'}</small>`}
 const goalCard=c=>S.goal?`<section class="card qc">${goal(c)}</section>`:'';
 function bk(){if(!Object.keys(S.days).length)return '';const d=Math.floor((Date.now()-(S.lastBackup||S.since))/864e5);return d>=15?`<div class="warn">Hace ${d} días no haces un respaldo. <button class="lnk" data-a="ex">Respaldar ahora</button></div>`:''}
 function saveDraft(){if(D.segs.some(g=>g.i||g.o)||D.note.trim())S.drafts[D.date]={note:D.note,segs:D.segs.map(x=>({...x}))};else delete S.drafts[D.date];sv()}
+function onb(){if(S.onbDone)return '';
+ const it=[['👤','Pon tu nombre','pers',!!S.name],['💵','Pon tu valor por hora','pago',rateFor(today())>0],['⏱','Revisa cómo redondea tu empresa','regla',!!S.seen.regla],['🎨','Elige tus colores','look',!!S.seen.look],['✅','Registra tu primer día','',Object.keys(S.days).length>0]],d=it.filter(x=>x[3]).length;
+ if(d===it.length){S.onbDone=true;sv();setTimeout(()=>toast('¡Todo listo! 🎉'),500);return ''}
+ return `<section class="card ob"><div class="obh"><b>¡Bienvenido! Personaliza tu app</b><button class="lnk" data-a="obx">Ocultar</button></div><div class="pg"><i style="width:${d/it.length*100}%"></i></div><small>${d} de ${it.length} pasos</small>${it.map(([ic,t,sec,ok])=>`<button class="ob-i${ok?' ok':''}" data-a="ob" data-s="${sec}"><span>${ok?'✓':ic}</span>${t}<em>›</em></button>`).join('')}</section>`}
 function dr(){const o=Object.keys(S.drafts).filter(k=>k!==D.date).sort();return o.length?`<div class="warn">✏️ Registro sin guardar: ${o.map(k=>`<button class="lnk" data-a="od" data-d="${k}">${k.slice(8)}/${k.slice(5,7)}</button>`).join(' · ')}</div>`:''}
 function cal(){const y=M.y,m=M.m,N=new Date(y,m+1,0).getDate(),off=(new Date(y,m,1).getDay()+(S.sun?0:6))%7,td=today();let h='';
  for(let i=0;i<off;i++)h+='<i></i>';
@@ -203,32 +213,39 @@ function vMes(){const ks=monthKeys(Q),t=qr(M.y,M.m,Q),a=qr(M.y,M.m,1),b=qr(M.y,M
 ${cal()}${Q?goalCard(t.c):''}
 ${ks.length?chart():''}${rows||'<p class="empty">Aún no hay registros en este mes</p>'}${vYear()}${ks.length?'<button class="ghost" data-a="sh">📤 Compartir resumen</button><button class="ghost" data-a="csv">Exportar este mes (CSV)</button>':''}`}
 
-function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PRE[0],ti=PRE.findIndex(p=>p.a1===t.a1&&p.a2===t.a2);
- return `<section class="card"><h3>Valor por hora</h3>${rs.map(r=>`<div class="rt"><div><b>${$r(r.rate)}</b><small>${r.from==='2000-01-01'?'Tarifa inicial':'Desde '+fdate(r.from)}</small></div>${rs.length>1?`<button class="x" data-a="dr" data-d="${r.from}" aria-label="Borrar tarifa">✕</button>`:''}</div>`).join('')}
+let OPEN='';
+const acc=(id,ic,t,sub,body,cls='ab')=>`<section class="card nv"><button class="nvh" data-a="ac" data-id="${id}" aria-expanded="${OPEN===id}"><span class="nvi">${ic}</span><span class="nvt"><b>${t}</b><small>${sub}</small></span><span class="nvc">${OPEN===id?'Cerrar':'Abrir'}</span></button><div class="nvm${OPEN===id?' open':''}" data-id="${id}"><div><div class="${cls}">${body}</div></div></div></section>`;
+function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PRE[0],ti=PRE.findIndex(p=>p.a1===t.a1&&p.a2===t.a2),cr=rateFor(today());
+ const pago=`<h4>Valor por hora</h4>${rs.map(r=>`<div class="rt"><div><b>${$r(r.rate)}</b><small>${r.from==='2000-01-01'?'Tarifa inicial':'Desde '+fdate(r.from)}</small></div>${rs.length>1?`<button class="x" data-a="dr" data-d="${r.from}" aria-label="Borrar tarifa">✕</button>`:''}</div>`).join('')}
 <div class="tr" style="margin-top:12px"><div><label>Nuevo valor por hora</label><input id="rv" type="number" inputmode="numeric" placeholder="9000"></div><div><label>Rige desde</label><input id="rf" type="date" value="${today()}"></div></div>
-<button class="ghost" data-a="ar">＋ Agregar aumento</button>
-<div class="hint n">Cada día se paga con la tarifa vigente en su fecha, así los meses anteriores no cambian.</div></section>
-<section class="card"><h3>Regla de la empresa</h3><label>Solo cuentan bloques de</label>
-<select id="st">${[[30,'30 minutos'],[15,'15 minutos'],[60,'1 hora'],[1,'Tiempo exacto']].map(([v,t])=>`<option value="${v}" ${S.step==v?'selected':''}>${t}</option>`).join('')}</select>
+<button class="ghost" data-a="ar">＋ Agregar valor</button>
+<div class="hint n">Cada día se paga con el valor vigente en su fecha, así los meses anteriores no cambian.</div>
+<h4>Descuentos y meta</h4><div class="tr"><div><label>Salud %</label><input id="ds" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="${S.ds}"></div><div><label>Pensión %</label><input id="dp" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="${S.dp}"></div></div>
+<label style="margin-top:12px">Meta de horas por quincena</label><input id="gl" type="number" inputmode="numeric" min="0" value="${S.goal||''}" placeholder="Ej.: 80">
+<div class="hint n">Con los descuentos en 0 solo ves el pago bruto. Confirma los porcentajes en tu desprendible de pago.</div>`;
+ const regla=`<label>Solo cuentan bloques de</label><select id="st">${[[30,'30 minutos'],[15,'15 minutos'],[60,'1 hora'],[1,'Tiempo exacto']].map(([v,tt])=>`<option value="${v}" ${S.step==v?'selected':''}>${tt}</option>`).join('')}</select>
 <label style="margin-top:12px">Se aplica a</label><select id="md"><option value="seg" ${S.mode==='seg'?'selected':''}>Cada turno (entrada a huella de cierre)</option><option value="day" ${S.mode==='day'?'selected':''}>El total del día</option></select>
-<div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div></section>
-<section class="card"><h3>Apariencia</h3><label>Tema de color</label><div class="sw">${PRE.map((p,i)=>`<button class="sb${ti===i?' on':''}" data-a="th" data-n="${i}" style="background:linear-gradient(135deg,${p.a1},${p.a2})">${p.n}</button>`).join('')}</div>
+<div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div>`;
+ const look=`<label>Tema de color</label><div class="sw">${PRE.map((p,i)=>`<button class="sb${ti===i?' on':''}" data-a="th" data-n="${i}" style="background:linear-gradient(135deg,${p.a1},${p.a2})">${p.n}</button>`).join('')}</div>
 <div class="tr" style="margin-top:12px"><div><label>Color 1</label><input type="color" id="c1" value="${t.a1}"></div><div><label>Color 2</label><input type="color" id="c2" value="${t.a2}"></div></div>
-<label style="margin-top:12px">Modo</label><select id="lk">${[['auto','Automático (como tu celular)'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<option value="${v}" ${(S.look||'auto')===v?'selected':''}>${l}</option>`).join('')}</select></section>
-<section class="card"><h3>Personalizar</h3><label>Tu nombre (opcional)</label><input id="nm" maxlength="20" placeholder="Ej.: Laura" value="${esc(S.name||'')}">
+<label style="margin-top:12px">Modo</label><select id="lk">${[['auto','Automático (como tu celular)'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<option value="${v}" ${(S.look||'auto')===v?'selected':''}>${l}</option>`).join('')}</select>`;
+ const pers=`<label>Tu nombre (opcional)</label><input id="nm" maxlength="20" placeholder="Ej.: Laura" value="${esc(S.name||'')}">
 <div class="tr" style="margin-top:12px"><div><label>Hora</label><select id="fh">${op([['24','24 horas'],['12','12 horas']],S.h12?'12':'24')}</select></div><div><label>Semana empieza</label><select id="fw">${op([['mon','Lunes'],['sun','Domingo']],S.sun?'sun':'mon')}</select></div></div>
 <div class="tr" style="margin-top:12px"><div><label>Tamaño</label><select id="fs">${op([['n','Normal'],['g','Grande'],['x','Muy grande']],S.fs||'n')}</select></div><div><label>Montos</label><select id="hd">${op([['show','Mostrar'],['hide','Ocultar']],S.hide?'hide':'show')}</select></div></div>
-<div class="hint n">Si ocultas los montos, aparece un ojito arriba para verlos un momento.</div></section>
-<section class="card"><h3>Descuentos y meta</h3><div class="tr"><div><label>Salud %</label><input id="ds" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="${S.ds}"></div><div><label>Pensión %</label><input id="dp" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="${S.dp}"></div></div><label style="margin-top:12px">Meta de horas por quincena</label><input id="gl" type="number" inputmode="numeric" min="0" value="${S.goal||''}" placeholder="Ej.: 80"><div class="hint n">Con los descuentos en 0 solo ves el pago bruto. Confirma los porcentajes en tu desprendible de pago.</div></section>
-<section class="card"><h3>Respaldo</h3><div class="row" style="margin:0"><button class="ghost" style="margin:0" data-a="ex">Exportar</button><button class="ghost" style="margin:0" data-a="im">Importar</button></div>
-<input type="file" id="fi" accept=".json,application/json" hidden><div class="hint n">Tus datos viven solo en este teléfono. Exporta un respaldo de vez en cuando.</div></section>
-<section class="card nv"><button class="nvh" data-a="nv" aria-expanded="${NV}"><span class="nvi">✨</span><span class="nvt"><b>Novedades</b><small>Versión ${NOV[0].v} · ${NOV[0].t}</small></span><span class="nvc">${NV?'Ocultar':'Leer más'}</span></button>
-<div class="nvm${NV?' open':''}" id="nvm"><div><div class="tl">${NOV.map((n,i)=>`<div class="ti"><span class="tdot${i?'':' now'}"></span><div class="tb"><div class="tv"><b>v${n.v}</b>${i?'':'<em>Actual</em>'}<span>${n.t}</span></div><ul>${n.i.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('')}</div></div></div></section>
-<p class="hint n" style="text-align:center">Mis Horas · versión ${VER}</p>`}
+<div class="hint n">Si ocultas los montos, aparece un ojito arriba para verlos un momento.</div>`;
+ const resp=`<div class="row" style="margin:0"><button class="ghost" style="margin:0" data-a="ex">Exportar</button><button class="ghost" style="margin:0" data-a="im">Importar</button></div><input type="file" id="fi" accept=".json,application/json" hidden><div class="hint n">Tus datos viven solo en este teléfono. Exporta un respaldo de vez en cuando.</div>`;
+ const tl=`<div class="tl">${NOV.map((n,i)=>`<div class="ti"><span class="tdot${i?'':' now'}"></span><div class="tb"><div class="tv"><b>v${n.v}</b>${i?'':'<em>Actual</em>'}<span>${n.t}</span></div><ul>${n.i.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('')}</div>`;
+ return acc('pago','💵','Pago y descuentos',cr?`${$r(cr)} por hora${dsc()?` · descuentos ${dsc()}%`:''}`:'Pon tu valor por hora',pago)
+ +acc('regla','⏱','Regla de la empresa',`Bloques de ${S.step===1?'tiempo exacto':S.step===60?'1 hora':S.step+' min'} · ${S.mode==='seg'?'por turno':'por día'}`,regla)
+ +acc('look','🎨','Apariencia',`${t.n||'Personalizado'} · ${({auto:'Automático',light:'Claro',dark:'Oscuro'})[S.look||'auto']}`,look)
+ +acc('pers','👤','Personalizar',S.name?esc(S.name):'Nombre, hora, tamaño y montos',pers)
+ +acc('resp','💾','Respaldo',S.lastBackup?'Último: '+new Date(S.lastBackup).toLocaleDateString('es-CO',{day:'numeric',month:'short'}):'Aún sin respaldo',resp)
+ +acc('nov','✨','Novedades',`Versión ${NOV[0].v} · ${NOV[0].t}`,tl,'ab0')
+ +`<p class="hint n" style="text-align:center">Mis Horas · versión ${VER}</p>`}
 
 function R(){const n=new Date();
  $('#app').innerHTML=`<header class="hero">${S.hide?`<button class="eye" data-a="eye" aria-label="Ver montos">${REV?'🙈':'👁'}</button>`:''}<div class="dow">${S.name?'Hola, '+esc(S.name)+' · ':''}${n.toLocaleDateString('es-CO',{weekday:'long'})}</div><div class="big">${n.getDate()} de ${MES[n.getMonth()].toLowerCase()}</div><div class="yr">${n.getFullYear()} · <span id="clk"></span></div></header>
-<main${ANIM?' class="an"':''}>${rateFor(today())?'':'<div class="warn">Primero pon tu valor por hora en Ajustes → Valor por hora.</div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
+<main${ANIM?' class="an"':''}>${rateFor(today())||!S.onbDone?'':'<div class="warn">Primero pon tu valor por hora. <button class="lnk" data-a="ob" data-s="pago">Configurar</button></div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
 <nav>${[['reg','⏱','Registrar'],['mes','📅','Mes'],['cfg','⚙️','Ajustes']].map(([t,i,l])=>`<button data-a="t" data-t="${t}" class="${T===t?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav>`;
  if(T==='reg')paint();clock();if(ANIM)cu();ANIM=false}
 function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12})}
@@ -248,6 +265,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  else if(a==='od'){openDay(b.dataset.d);T='reg';R();scrollTo(0,0)}
  else if(a==='now'){const d=new Date();D.segs[n][b.dataset.f]=p2(d.getHours())+':'+p2(d.getMinutes());saveDraft();R()}
  else if(a==='nv'){NV=!NV;const m=$('#nvm');if(m)m.classList.toggle('open',NV);b.setAttribute('aria-expanded',NV);const c=b.querySelector('.nvc');if(c)c.textContent=NV?'Ocultar':'Leer más'}
+ else if(a==='ac'){const id=b.dataset.id;OPEN=OPEN===id?'':id;if(OPEN==='regla'||OPEN==='look'){S.seen[OPEN]=true;sv()}
+  document.querySelectorAll('.nvm[data-id]').forEach(m=>{const o=m.dataset.id===OPEN,h=m.parentElement.querySelector('.nvh');m.classList.toggle('open',o);h.setAttribute('aria-expanded',o);h.querySelector('.nvc').textContent=o?'Cerrar':'Abrir'})}
+ else if(a==='ob'){const sec=b.dataset.s;if(!sec){const e=$('#dt');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(sec==='regla'||sec==='look'){S.seen[sec]=true;sv()}T='cfg';OPEN=sec;ANIM=true;R();scrollTo(0,0)}
+ else if(a==='obx'){S.onbDone=true;sv();R()}
  else if(a==='eye'){REV=!REV;R()}
  else if(a==='sh')shareTxt()
  else if(a==='th'){S.th={...PRE[n]};sv();theme();R()}
