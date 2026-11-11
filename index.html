@@ -91,6 +91,13 @@ main.an .pg i{animation:fillw .9s ease both}
 .ob-i span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--cd);font-size:15px;flex:none}
 .ob-i em{margin-left:auto;font-style:normal;color:var(--mu);font-size:20px}
 .ob-i.ok{opacity:.6}.ob-i.ok span{background:var(--ac);color:#fff;font-weight:700}
+.mk{text-align:center}
+.mkb{width:100%;min-height:72px;border-radius:20px;font-size:20px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#059669,var(--a1));box-shadow:0 8px 24px #05966940}
+.mkb.out{background:linear-gradient(135deg,#e11d48,var(--a2));box-shadow:0 8px 24px #e11d4840}.mkb span{font-size:18px}
+.mks{margin-top:10px;font-size:14px;color:var(--mu);min-height:20px}.mks b{color:var(--tx)}.mk .pg{margin:8px 0 0}
+.cmr{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin-top:10px}.cmr b{display:block;font-size:18px}
+.cmd{font-weight:800;font-size:15px;padding:8px 10px;border-radius:14px}.cmd small{color:inherit;font-weight:700}
+.cmd.up{color:#059669;background:#05966922}.cmd.dn{color:#e11d48;background:#e11d4822}
 .sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sb{min-height:56px;border-radius:14px;color:#fff;font-weight:700;font-size:13px;text-shadow:0 1px 3px #0006;border:3px solid transparent}.sb.on{border-color:var(--tx)}
 input[type=color]{padding:4px}
 .bar{fill:var(--ac)}.lbl{fill:var(--mu);font-size:10px}.axis{stroke:var(--ln);stroke-width:1}
@@ -107,13 +114,13 @@ nav button.on{color:var(--ac);background:var(--t2)}
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const VER='1.4',$=s=>document.querySelector(s),K='mishoras.v1';
+const VER='1.5',$=s=>document.querySelector(s),K='mishoras.v1';
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let ok=true,T='reg',S;
 try{S=JSON.parse(localStorage.getItem(K)||'null');localStorage.setItem(K+'t','1')}catch(e){ok=false}
 S=S||{days:{},rates:[{from:'2000-01-01',rate:0}],step:30,mode:'seg'};
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fix=()=>{S.notes=S.notes||{};S.seen=S.seen||{};if(S.onbDone===undefined)S.onbDone=!!(Object.keys(S.days||{}).length||S.name||(S.rates||[]).some(r=>r.rate>0));S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
+const fix=()=>{S.notes=S.notes||{};S.seen=S.seen||{};if(S.lunch===undefined)S.lunch=60;if(S.onbDone===undefined)S.onbDone=!!(Object.keys(S.days||{}).length||S.name||(S.rates||[]).some(r=>r.rate>0));S.drafts=S.drafts||{};S.ds=+S.ds||0;S.dp=+S.dp||0;S.goal=+S.goal||0;S.since=S.since||Date.now()};fix();
 const sv=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){ok=false}};
 const p2=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
 const today=()=>iso(new Date()),dt=k=>new Date(+k.slice(0,4),+k.slice(5,7)-1,+k.slice(8));
@@ -137,7 +144,7 @@ function openDay(d){const f=S.drafts[d];D=f?{date:d,note:f.note||'',segs:f.segs.
 function toast(t){const e=$('#toast');e.textContent=t;e.className='on';clearTimeout(toast.h);toast.h=setTimeout(()=>e.className='',1800)}
 
 function vReg(){const n=new Date(),q=n.getDate()<=15?1:2,t=qr(n.getFullYear(),n.getMonth(),q);
-return `${bk()}${dr()}${onb()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}</section>
+return `${bk()}${dr()}${mk()}${onb()}<section class="card qc"><small>Quincena actual · ${qL(n.getFullYear(),n.getMonth(),q)} de ${MES[n.getMonth()].toLowerCase()}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}<small>${fm(t.c)} contadas · ${t.n} ${t.n===1?'día':'días'}</small>${goal(t.c)}${projL()}</section>
 <section class="card"><label for="dt">Fecha del registro</label>
 <input type="date" id="dt" value="${D.date}"><div class="hint">${fdate(D.date)}</div>
 ${D.segs.map((g,n)=>`<div class="seg"><div class="sh"><b>Turno ${n+1}</b><span class="chip" id="c${n}"></span>${D.segs.length>1?`<button class="x" data-a="rs" data-n="${n}" aria-label="Quitar turno">✕</button>`:''}</div>
@@ -170,7 +177,7 @@ const ft=t=>{if(!S.h12)return t;const h=+t.slice(0,2);return `${h%12||12}:${t.sl
 const op=(a,cur)=>a.map(([v,l])=>`<option value="${v}" ${String(cur)===v?'selected':''}>${l}</option>`).join('');
 let NV=false,ANIM=true;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function cu(){if(RM)return;document.querySelectorAll('.cu').forEach(e=>{const to=+e.textContent.replace(/\D/g,'');if(!to)return;const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/700);e.textContent=$r(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
-const NOV=[{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
+const NOV=[{v:'1.5',t:'Marcar, comparar y proyectar',i:['Botón para marcar entrada y salida','Cuenta regresiva del almuerzo','Comparación con la quincena o el mes anterior','Proyección al cierre de la quincena','Gráfica por semana y promedios','Invitar amigos con un toque']},{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
 const dsc=()=>S.ds+S.dp;
 const netL=p=>dsc()?`<small>Neto aprox.: ${$$(p*(1-dsc()/100))} · descuentos ${dsc()}%</small>`:'';
 function goal(c){if(!S.goal)return '';const g=S.goal*60,pc=Math.min(100,Math.round(c/g*100)),f=g-c;return `<div class="pg"><i style="width:${pc}%"></i></div><small>Meta ${S.goal} h · ${f>0?`faltan ${fm(f)}`:'¡meta cumplida!'}</small>`}
@@ -181,6 +188,55 @@ function onb(){if(S.onbDone)return '';
  const it=[['👤','Pon tu nombre','pers',!!S.name],['💵','Pon tu valor por hora','pago',rateFor(today())>0],['⏱','Revisa cómo redondea tu empresa','regla',!!S.seen.regla],['🎨','Elige tus colores','look',!!S.seen.look],['✅','Registra tu primer día','',Object.keys(S.days).length>0]],d=it.filter(x=>x[3]).length;
  if(d===it.length){S.onbDone=true;sv();setTimeout(()=>toast('¡Todo listo! 🎉'),500);return ''}
  return `<section class="card ob"><div class="obh"><b>¡Bienvenido! Personaliza tu app</b><button class="lnk" data-a="obx">Ocultar</button></div><div class="pg"><i style="width:${d/it.length*100}%"></i></div><small>${d} de ${it.length} pasos</small>${it.map(([ic,t,sec,ok])=>`<button class="ob-i${ok?' ok':''}" data-a="ob" data-s="${sec}"><span>${ok?'✓':ic}</span>${t}<em>›</em></button>`).join('')}</section>`}
+const mmss=x=>{x=Math.max(0,Math.ceil(x));return p2(Math.floor(x/60))+':'+p2(x%60)};
+const appUrl=()=>location.href.split('#')[0].split('?')[0].replace(/index\.html$/,'');
+function doSave(){const s=D.segs.filter(g=>g.i&&g.o&&g.i!==g.o),rest=D.segs.filter(g=>(g.i||g.o)&&!(g.i&&g.o&&g.i!==g.o));
+ if(!s.length){saveDraft();return}
+ S.days[D.date]=s;const nt=D.note.trim();if(nt)S.notes[D.date]=nt;else delete S.notes[D.date];
+ if(rest.length)S.drafts[D.date]={note:D.note,segs:[...s,...rest].map(x=>({...x}))};else delete S.drafts[D.date];
+ D.segs=(rest.length?[...s,...rest]:s).map(x=>({...x}));sv()}
+function mkInfo(){for(const k of Object.keys(S.drafts).sort().reverse()){const f=S.drafts[k],i=f.segs.findIndex(g=>g.i&&!g.o);
+  if(i>=0&&Date.now()-new Date(`${k}T${f.segs[i].i}:00`)<18*36e5)return{open:true,date:k,idx:i,since:f.segs[i].i}}
+ return{open:false}}
+function mk(){const m=mkInfo();return `<section class="card mk"><button class="mkb ${m.open?'out':'in'}" data-a="mk"><span>${m.open?'■':'▶'}</span>${m.open?'Marcar salida':'Marcar entrada'}</button><div class="mks" id="mks"></div><div class="pg" id="mkp" style="display:none"><i></i></div></section>`}
+function mkTick(){const e=$('#mks');if(!e)return;const m=mkInfo(),p=$('#mkp');let h='',pr=null;
+ const hoy=()=>{const c=S.days[today()]?calc(S.days[today()]).c:0;return c?`Hoy llevas <b>${fm(c)}</b> contadas`:'Toca el botón para marcar tu hora'};
+ if(m.open){const mn=Math.max(0,Math.floor((Date.now()-new Date(`${m.date}T${m.since}:00`))/6e4));h=`En turno desde <b>${ft(m.since)}</b> · lleva <b>${fm(mn)}</b>`}
+ else if(S.lastOut&&S.lunch>0){const el=(Date.now()-S.lastOut.t)/1000,L=S.lunch*60,rem=L-el;
+  if(rem>0){h=`🍽 Almuerzo · quedan <b>${mmss(rem)}</b> <button class="lnk" data-a="mkend">Terminé el día</button>`;pr=el/L*100}
+  else if(rem>-1800){h=`⚠ Te pasaste <b>${fm(Math.ceil(-rem/60))}</b> del almuerzo <button class="lnk" data-a="mkend">Terminé el día</button>`;pr=100}
+  else h=hoy()}
+ else h=hoy();
+ if(e.dataset.h!==h){e.innerHTML=h;e.dataset.h=h}
+ if(p){p.style.display=pr===null?'none':'block';if(pr!==null)p.firstChild.style.width=Math.min(100,pr)+'%'}}
+function proj(){const n=new Date(),y=n.getFullYear(),m=n.getMonth(),q=n.getDate()<=15?1:2,N=new Date(y,m+1,0).getDate(),end=q===1?15:N,t=qr(y,m,q);
+ const days=Object.keys(S.days).filter(k=>dt(k)<=n&&n-dt(k)<=28*864e5);if(days.length<3)return null;
+ const wk=Array(7).fill(0);let mins=0;days.forEach(k=>{wk[dt(k).getDay()]++;mins+=calc(S.days[k]).c});
+ let rem=0;for(let d=n.getDate()+1;d<=end;d++)if(wk[new Date(y,m,d).getDay()]>=2)rem++;
+ if(!S.days[today()]&&wk[n.getDay()]>=2)rem++;
+ return{pay:t.pay+rem*(mins/days.length)/60*rateFor(today()),rem,end,q}}
+function projL(){const p=proj();if(!p||!p.rem)return '';return `<small>Proyección al cierre (día ${p.end}): ≈ <b>${$$(p.pay)}</b> · ${p.rem} ${p.rem===1?'día':'días'} más</small>`}
+function projCard(){const n=new Date(),p=proj();if(!p||!p.rem||M.y!==n.getFullYear()||M.m!==n.getMonth()||Q!==p.q)return '';
+ return `<section class="card qc"><small>Proyección al cierre de la quincena</small><big class="cu">${$$(p.pay)}</big><small>≈ según tus últimos días · ${p.rem} ${p.rem===1?'día':'días'} más de trabajo</small></section>`}
+function cmp(t){let py=M.y,pm=M.m,pq=Q;if(Q!==2){pm--;if(pm<0){pm=11;py--}}if(Q===1)pq=2;else if(Q===2)pq=1;
+ const p=qr(py,pm,pq);if(!p.n||!t.n)return '';const dl=t.pay-p.pay,pc=p.pay?Math.round(Math.abs(dl)/p.pay*100):null,up=dl>=0;
+ const nm=Q===0?`${MES[pm]} ${py}`:`la quincena ${qL(py,pm,pq)} de ${MES[pm].toLowerCase()}`;
+ return `<section class="card"><small>Comparado con ${nm}</small><div class="cmr"><div><small>Antes</small><b>${$$(p.pay)}</b><small>${fm(p.c)}</small></div><div class="cmd ${up?'up':'dn'}">${up?'▲':'▼'} ${$$(Math.abs(dl))}${pc===null?'':`<small>${up?'+':'−'}${pc}%</small>`}</div><div><small>Ahora</small><b>${$$(t.pay)}</b><small>${fm(t.c)}</small></div></div></section>`}
+function wkc(){const ks=monthKeys(Q);if(!ks.length)return '';
+ const y=M.y,m=M.m,N=new Date(y,m+1,0).getDate(),a=Q===2?16:1,z=Q===1?15:N,sd=S.sun?0:1,wk=[];
+ let cur=new Date(y,m,a);cur.setDate(cur.getDate()-((cur.getDay()-sd+7)%7));const last=new Date(y,m,z);
+ while(cur<=last){const s0=new Date(cur),e0=new Date(cur);e0.setDate(e0.getDate()+6);
+  const d1=Math.max(a,s0.getMonth()===m?s0.getDate():1),d2=Math.min(z,e0.getMonth()===m?e0.getDate():N);let c=0;
+  for(let d=d1;d<=d2;d++){const k=`${y}-${p2(m+1)}-${p2(d)}`;if(S.days[k])c+=calc(S.days[k]).c}
+  wk.push({c,l:d1===d2?`${d1}`:`${d1}–${d2}`});cur.setDate(cur.getDate()+7)}
+ const tot=ks.reduce((x,k)=>x+calc(S.days[k]).c,0),nw=wk.filter(w=>w.c>0).length||1,bd=Array(7).fill(0),bn=Array(7).fill(0);
+ ks.forEach(k=>{const d=dt(k).getDay();bd[d]+=calc(S.days[k]).c;bn[d]++});
+ let bi=-1,bv=-1;bd.forEach((v,i)=>{if(bn[i]&&v/bn[i]>bv){bv=v/bn[i];bi=i}});
+ const DN=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],mx=Math.max(1,...wk.map(w=>w.c/60)),W=330,H=100,n=wk.length,st=W/n;
+ const bars=wk.map((w,i)=>{const h=w.c/60,bh=h/mx*H,x=i*st+st*.2,bw=st*.6,cx=x+bw/2;
+  return `<rect class="bar" style="animation-delay:${i*60}ms" x="${x}" y="${H-bh}" width="${bw}" height="${h?Math.max(bh,2):0}" rx="8"/>${h?`<text class="lbl" x="${cx}" y="${H-bh-5}" text-anchor="middle">${+h.toFixed(1)}</text>`:''}<text class="lbl" x="${cx}" y="${H+14}" text-anchor="middle">${w.l}</text>`}).join('');
+ return `<section class="card"><h3>Por semana</h3><svg viewBox="0 -14 ${W} ${H+34}" width="100%" role="img" aria-label="Horas por semana"><line class="axis" x1="0" x2="${W}" y1="${H}" y2="${H}"/>${bars}</svg><small>Horas contadas por semana</small>
+<div class="sum" style="margin-top:12px"><div><small>Promedio por día</small><big>${fm(Math.round(tot/ks.length))}</big></div><div><small>Promedio por semana</small><big>${fm(Math.round(tot/nw))}</big></div><div><small>Mejor día</small><big style="font-size:16px;text-transform:capitalize">${bi>=0?DN[bi]:'—'}</big></div></div></section>`}
 function dr(){const o=Object.keys(S.drafts).filter(k=>k!==D.date).sort();return o.length?`<div class="warn">✏️ Registro sin guardar: ${o.map(k=>`<button class="lnk" data-a="od" data-d="${k}">${k.slice(8)}/${k.slice(5,7)}</button>`).join(' · ')}</div>`:''}
 function cal(){const y=M.y,m=M.m,N=new Date(y,m+1,0).getDate(),off=(new Date(y,m,1).getDay()+(S.sun?0:6))%7,td=today();let h='';
  for(let i=0;i<off;i++)h+='<i></i>';
@@ -210,8 +266,8 @@ function vMes(){const ks=monthKeys(Q),t=qr(M.y,M.m,Q),a=qr(M.y,M.m,1),b=qr(M.y,M
 <div class="tabs">${[[0,'Mes'],[1,'1ª quincena'],[2,'2ª quincena']].map(([v,l])=>`<button data-a="q" data-n="${v}" class="${Q===v?'on':''}">${l}</button>`).join('')}</div>
 <section class="grid"><div class="card wide"><small>${Q?`Pago de la quincena ${qL(M.y,M.m,Q)}`:'Pago aproximado del mes'}</small><big class="cu">${$$(t.pay)}</big>${netL(t.pay)}${Q?'':`<small>1ª (${qL(M.y,M.m,1)}): ${$$(a.pay)} · 2ª (${qL(M.y,M.m,2)}): ${$$(b.pay)}</small>`}</div>
 <div class="card"><small>Horas</small><big>${fm(t.c)}</big></div><div class="card"><small>Días</small><big>${t.n}</big></div><div class="card"><small>No contadas</small><big class="lost">${fm(t.l)}</big></div></section>
-${cal()}${Q?goalCard(t.c):''}
-${ks.length?chart():''}${rows||'<p class="empty">Aún no hay registros en este mes</p>'}${vYear()}${ks.length?'<button class="ghost" data-a="sh">📤 Compartir resumen</button><button class="ghost" data-a="csv">Exportar este mes (CSV)</button>':''}`}
+${cal()}${Q?goalCard(t.c):''}${cmp(t)}${projCard()}
+${ks.length?chart()+wkc():''}${rows||'<p class="empty">Aún no hay registros en este mes</p>'}${vYear()}${ks.length?'<button class="ghost" data-a="sh">📤 Compartir resumen</button><button class="ghost" data-a="csv">Exportar este mes (CSV)</button>':''}`}
 
 let OPEN='';
 const acc=(id,ic,t,sub,body,cls='ab')=>`<section class="card nv"><button class="nvh" data-a="ac" data-id="${id}" aria-expanded="${OPEN===id}"><span class="nvi">${ic}</span><span class="nvt"><b>${t}</b><small>${sub}</small></span><span class="nvc">${OPEN===id?'Cerrar':'Abrir'}</span></button><div class="nvm${OPEN===id?' open':''}" data-id="${id}"><div><div class="${cls}">${body}</div></div></div></section>`;
@@ -225,7 +281,8 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
 <div class="hint n">Con los descuentos en 0 solo ves el pago bruto. Confirma los porcentajes en tu desprendible de pago.</div>`;
  const regla=`<label>Solo cuentan bloques de</label><select id="st">${[[30,'30 minutos'],[15,'15 minutos'],[60,'1 hora'],[1,'Tiempo exacto']].map(([v,tt])=>`<option value="${v}" ${S.step==v?'selected':''}>${tt}</option>`).join('')}</select>
 <label style="margin-top:12px">Se aplica a</label><select id="md"><option value="seg" ${S.mode==='seg'?'selected':''}>Cada turno (entrada a huella de cierre)</option><option value="day" ${S.mode==='day'?'selected':''}>El total del día</option></select>
-<div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div>`;
+<div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div>
+<label style="margin-top:12px">Duración del almuerzo (minutos)</label><input id="lm" type="number" inputmode="numeric" min="0" max="180" value="${S.lunch}"><div class="hint n">Se usa en la cuenta regresiva del botón de marcar. Pon 0 para quitarla.</div>`;
  const look=`<label>Tema de color</label><div class="sw">${PRE.map((p,i)=>`<button class="sb${ti===i?' on':''}" data-a="th" data-n="${i}" style="background:linear-gradient(135deg,${p.a1},${p.a2})">${p.n}</button>`).join('')}</div>
 <div class="tr" style="margin-top:12px"><div><label>Color 1</label><input type="color" id="c1" value="${t.a1}"></div><div><label>Color 2</label><input type="color" id="c2" value="${t.a2}"></div></div>
 <label style="margin-top:12px">Modo</label><select id="lk">${[['auto','Automático (como tu celular)'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<option value="${v}" ${(S.look||'auto')===v?'selected':''}>${l}</option>`).join('')}</select>`;
@@ -233,12 +290,14 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
 <div class="tr" style="margin-top:12px"><div><label>Hora</label><select id="fh">${op([['24','24 horas'],['12','12 horas']],S.h12?'12':'24')}</select></div><div><label>Semana empieza</label><select id="fw">${op([['mon','Lunes'],['sun','Domingo']],S.sun?'sun':'mon')}</select></div></div>
 <div class="tr" style="margin-top:12px"><div><label>Tamaño</label><select id="fs">${op([['n','Normal'],['g','Grande'],['x','Muy grande']],S.fs||'n')}</select></div><div><label>Montos</label><select id="hd">${op([['show','Mostrar'],['hide','Ocultar']],S.hide?'hide':'show')}</select></div></div>
 <div class="hint n">Si ocultas los montos, aparece un ojito arriba para verlos un momento.</div>`;
+ const inv=`<div class="hint n" style="margin:0 0 10px">Manda el link con las instrucciones para instalarla. Cada quien guarda sus horas solo en su celular.</div><div class="row" style="margin:0"><button class="pri" data-a="inv">Compartir invitación</button><button class="ghost" style="margin:0;width:auto" data-a="cpl">Copiar link</button></div>`;
  const resp=`<div class="row" style="margin:0"><button class="ghost" style="margin:0" data-a="ex">Exportar</button><button class="ghost" style="margin:0" data-a="im">Importar</button></div><input type="file" id="fi" accept=".json,application/json" hidden><div class="hint n">Tus datos viven solo en este teléfono. Exporta un respaldo de vez en cuando.</div>`;
  const tl=`<div class="tl">${NOV.map((n,i)=>`<div class="ti"><span class="tdot${i?'':' now'}"></span><div class="tb"><div class="tv"><b>v${n.v}</b>${i?'':'<em>Actual</em>'}<span>${n.t}</span></div><ul>${n.i.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('')}</div>`;
  return acc('pago','💵','Pago y descuentos',cr?`${$r(cr)} por hora${dsc()?` · descuentos ${dsc()}%`:''}`:'Pon tu valor por hora',pago)
  +acc('regla','⏱','Regla de la empresa',`Bloques de ${S.step===1?'tiempo exacto':S.step===60?'1 hora':S.step+' min'} · ${S.mode==='seg'?'por turno':'por día'}`,regla)
  +acc('look','🎨','Apariencia',`${t.n||'Personalizado'} · ${({auto:'Automático',light:'Claro',dark:'Oscuro'})[S.look||'auto']}`,look)
  +acc('pers','👤','Personalizar',S.name?esc(S.name):'Nombre, hora, tamaño y montos',pers)
+ +acc('inv','🎁','Invitar amigos','Comparte la app con un toque',inv)
  +acc('resp','💾','Respaldo',S.lastBackup?'Último: '+new Date(S.lastBackup).toLocaleDateString('es-CO',{day:'numeric',month:'short'}):'Aún sin respaldo',resp)
  +acc('nov','✨','Novedades',`Versión ${NOV[0].v} · ${NOV[0].t}`,tl,'ab0')
  +`<p class="hint n" style="text-align:center">Mis Horas · versión ${VER}</p>`}
@@ -248,7 +307,7 @@ function R(){const n=new Date();
 <main${ANIM?' class="an"':''}>${rateFor(today())||!S.onbDone?'':'<div class="warn">Primero pon tu valor por hora. <button class="lnk" data-a="ob" data-s="pago">Configurar</button></div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
 <nav>${[['reg','⏱','Registrar'],['mes','📅','Mes'],['cfg','⚙️','Ajustes']].map(([t,i,l])=>`<button data-a="t" data-t="${t}" class="${T===t?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav>`;
  if(T==='reg')paint();clock();if(ANIM)cu();ANIM=false}
-function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12})}
+function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12});mkTick()}
 setInterval(clock,1000);
 
 function dl(name,txt,type){try{const f=new File([txt],name,{type});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(()=>{});return}}catch(e){}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
@@ -265,6 +324,13 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  else if(a==='od'){openDay(b.dataset.d);T='reg';R();scrollTo(0,0)}
  else if(a==='now'){const d=new Date();D.segs[n][b.dataset.f]=p2(d.getHours())+':'+p2(d.getMinutes());saveDraft();R()}
  else if(a==='nv'){NV=!NV;const m=$('#nvm');if(m)m.classList.toggle('open',NV);b.setAttribute('aria-expanded',NV);const c=b.querySelector('.nvc');if(c)c.textContent=NV?'Ocultar':'Leer más'}
+ else if(a==='mk'){const m=mkInfo(),now=new Date(),hm=p2(now.getHours())+':'+p2(now.getMinutes());
+  if(m.open){openDay(m.date);D.segs[m.idx].o=hm;S.lastOut={t:Date.now()};doSave();R();toast('Salida marcada ✓ · '+ft(hm))}
+  else{openDay(today());const e=D.segs.findIndex(g=>!g.i&&!g.o);if(e>=0)D.segs[e].i=hm;else D.segs.push({i:hm,o:''});S.lastOut=null;saveDraft();R();toast('Entrada marcada ✓ · '+ft(hm))}}
+ else if(a==='mkend'){S.lastOut=null;sv();mkTick()}
+ else if(a==='inv'){const x=`¡Hola! Te comparto *Mis Horas* 📲, una app para llevar la cuenta de tus horas de trabajo y calcular tu pago por quincena. Funciona sin internet y tus datos se quedan solo en tu celular.\n\n🍎 iPhone: abre el link en Safari → Compartir → "Añadir a pantalla de inicio".\n🤖 Android: abre el link en Chrome → tres puntos → "Instalar app".\n\n${appUrl()}`;
+  if(navigator.share)navigator.share({text:x}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(x).then(()=>toast('Invitación copiada ✓'))}
+ else if(a==='cpl'){if(navigator.clipboard)navigator.clipboard.writeText(appUrl()).then(()=>toast('Link copiado ✓'));else toast(appUrl())}
  else if(a==='ac'){const id=b.dataset.id;OPEN=OPEN===id?'':id;if(OPEN==='regla'||OPEN==='look'){S.seen[OPEN]=true;sv()}
   document.querySelectorAll('.nvm[data-id]').forEach(m=>{const o=m.dataset.id===OPEN,h=m.parentElement.querySelector('.nvh');m.classList.toggle('open',o);h.setAttribute('aria-expanded',o);h.querySelector('.nvc').textContent=o?'Cerrar':'Abrir'})}
  else if(a==='ob'){const sec=b.dataset.s;if(!sec){const e=$('#dt');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});return}
@@ -290,6 +356,7 @@ document.addEventListener('change',e=>{const t=e.target;
  else if(t.id==='st'){S.step=+t.value;sv();R()}
  else if(t.id==='md'){S.mode=t.value;sv();R()}
  else if(t.id==='lk'){S.look=t.value;sv();theme();R()}
+ else if(t.id==='lm'){S.lunch=Math.max(0,Math.min(180,+t.value||0));sv();R()}
  else if(t.id==='nm'){S.name=t.value.trim();sv();R()}
  else if(t.id==='fh'){S.h12=t.value==='12';sv();R()}
  else if(t.id==='fw'){S.sun=t.value==='sun';sv();R()}
