@@ -153,7 +153,7 @@ nav button.on{color:var(--ac);background:var(--t2)}
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const VER='1.6',$=s=>document.querySelector(s),K='mishoras.v1';
+const VER='1.7',$=s=>document.querySelector(s),K='mishoras.v1';
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let ok=true,T='reg',S;
 try{S=JSON.parse(localStorage.getItem(K)||'null');localStorage.setItem(K+'t','1')}catch(e){ok=false}
@@ -217,7 +217,7 @@ const op=(a,cur)=>a.map(([v,l])=>`<option value="${v}" ${String(cur)===v?'select
 let NV=false,ANIM=true,PT=0,DIR='',POPM=false;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function cu(){if(RM)return;document.querySelectorAll('.cu').forEach(e=>{const t=e.textContent;if(!/\d/.test(t))return;let k=0;e.setAttribute('aria-label',t);
  e.innerHTML=[...t].map(c=>/\d/.test(c)?`<span class="dg" aria-hidden="true"><span class="st" style="--n:${c};--k:${k++}">${'0123456789'.split('').map(x=>`<i>${x}</i>`).join('')}</span></span>`:`<span aria-hidden="true">${c}</span>`).join('')})}
-const NOV=[{v:'1.6',t:'Más fluida y premium',i:['Pantallas que se deslizan y barra inferior con píldora animada','Efecto cristal y barra superior compacta al bajar','Botón de marcar con pulso, onda y anillo del almuerzo','Confirmación animada al guardar y confeti al cumplir la meta','Cifras que giran y cambio de tema suave','Guía para instalar la app en iPhone y Android']},{v:'1.5',t:'Marcar, comparar y proyectar',i:['Botón para marcar entrada y salida','Cuenta regresiva del almuerzo','Comparación con la quincena o el mes anterior','Proyección al cierre de la quincena','Gráfica por semana y promedios','Invitar amigos con un toque']},{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
+const NOV=[{v:'1.7',t:'Avisos del almuerzo',i:['Notificación al empezar el almuerzo con la hora de regreso','Aviso con sonido y vibración al terminar el almuerzo, mientras la app siga abierta','La cuenta regresiva aparece en la primera salida del día']},{v:'1.6',t:'Más fluida y premium',i:['Pantallas que se deslizan y barra inferior con píldora animada','Efecto cristal y barra superior compacta al bajar','Botón de marcar con pulso, onda y anillo del almuerzo','Confirmación animada al guardar y confeti al cumplir la meta','Cifras que giran y cambio de tema suave','Guía para instalar la app en iPhone y Android']},{v:'1.5',t:'Marcar, comparar y proyectar',i:['Botón para marcar entrada y salida','Cuenta regresiva del almuerzo','Comparación con la quincena o el mes anterior','Proyección al cierre de la quincena','Gráfica por semana y promedios','Invitar amigos con un toque']},{v:'1.4',t:'Ajustes ordenados y bienvenida',i:['Ajustes en secciones que se abren y se cierran','Guía de primeros pasos para quien usa la app por primera vez','Aviso para configurar tu valor por hora']},{v:'1.3.1',t:'Borrador automático',i:['Lo que escribes se guarda solo en tu celular, aunque cierres la app o quede en segundo plano','Aviso cuando tienes un registro sin guardar','Si falta la salida, el turno queda pendiente en vez de perderse']},{v:'1.3',t:'Apariencia y personalización',i:['Temas de color y colores propios','Modo claro, oscuro o automático','Tu nombre, hora de 12 o 24 horas y primer día de la semana','Tamaño de la app y opción de ocultar montos','Animaciones suaves en pantallas, calendario, gráfica y montos']},{v:'1.2',t:'Más control',i:['Pago neto con descuentos','Meta por quincena','Notas por día y calendario del mes','Resumen para compartir y aviso de respaldo']},{v:'1.1',t:'Más visual',i:['Botón Ahora para la hora','Gráfica de horas por día','Acumulado del año']},{v:'1.0',t:'Primera versión',i:['Registro por turnos','Redondeo de la empresa','Pago por quincena']}];
 const dsc=()=>S.ds+S.dp;
 const netL=p=>dsc()?`<small>Neto aprox.: ${$$(p*(1-dsc()/100))} · descuentos ${dsc()}%</small>`:'';
 function goal(c){if(!S.goal)return '';const g=S.goal*60,pc=Math.min(100,Math.round(c/g*100)),f=g-c;return `<div class="pg"><i style="width:${pc}%"></i></div><small>Meta ${S.goal} h · ${f>0?`faltan ${fm(f)}`:'¡meta cumplida!'}</small>`}
@@ -277,9 +277,19 @@ function wkc(){const ks=monthKeys(Q);if(!ks.length)return '';
   return `<rect class="bar" style="animation-delay:${i*60}ms" x="${x}" y="${H-bh}" width="${bw}" height="${h?Math.max(bh,2):0}" rx="8"/>${h?`<text class="lbl" x="${cx}" y="${H-bh-5}" text-anchor="middle">${+h.toFixed(1)}</text>`:''}<text class="lbl" x="${cx}" y="${H+14}" text-anchor="middle">${w.l}</text>`}).join('');
  return `<section class="card"><h3>Por semana</h3><svg viewBox="0 -14 ${W} ${H+34}" width="100%" role="img" aria-label="Horas por semana"><line class="axis" x1="0" x2="${W}" y1="${H}" y2="${H}"/>${bars}</svg><small>Horas contadas por semana</small>
 <div class="sum" style="margin-top:12px"><div><small>Promedio por día</small><big>${fm(Math.round(tot/ks.length))}</big></div><div><small>Promedio por semana</small><big>${fm(Math.round(tot/nw))}</big></div><div><small>Mejor día</small><big style="font-size:16px;text-transform:capitalize">${bi>=0?DN[bi]:'—'}</big></div></div></section>`}
+const canNote=()=>'Notification' in window&&'serviceWorker' in navigator;
+async function note(title,body,tag){try{if(!S.notif||!canNote()||Notification.permission!=='granted')return;
+ const r=await Promise.race([navigator.serviceWorker.ready,new Promise((_,j)=>setTimeout(j,2000))]);
+ await r.showNotification(title,{body,tag:tag||'almuerzo',icon:'icon-192.png',vibrate:[200,100,200],renotify:true})}catch(e){}}
+async function askNote(){if(!canNote()){toast('Este navegador no permite avisos');return}
+ try{const p=await Notification.requestPermission();S.notif=p==='granted';sv();R();toast(p==='granted'?'Avisos activados ✓':'No diste permiso para los avisos')}catch(e){toast('No se pudo activar')}}
+function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.setValueAtTime(.2,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.8);o.start();o.stop(c.currentTime+.8)}catch(e){}}
+function lunchCheck(){const L=S.lastOut;if(!L||L.n||!(S.lunch>0))return;const el=Date.now()-L.t;if(el<S.lunch*60000)return;L.n=1;sv();
+ if(el<(S.lunch+30)*60000){note('⏰ Se acabó tu almuerzo','Es hora de volver. Toca para marcar tu entrada.','almuerzo-fin');beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);toast('⏰ Se acabó tu almuerzo')}}
 function ripple(b,e){const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),i=document.createElement('i');i.className='rip';i.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),650)}
 function doMark(){const m=mkInfo(),now=new Date(),hm=p2(now.getHours())+':'+p2(now.getMinutes());POPM=true;
- if(m.open){openDay(m.date);D.segs[m.idx].o=hm;S.lastOut={t:Date.now()};doSave();R();checkFx();goalFx();toast('Salida marcada ✓ · '+ft(hm))}
+ if(m.open){openDay(m.date);D.segs[m.idx].o=hm;doSave();const first=(S.days[D.date]||[]).length===1;S.lastOut=first?{t:Date.now()}:null;sv();R();checkFx();goalFx();toast('Salida marcada ✓ · '+ft(hm));
+  if(first&&S.lunch>0){const rt=new Date(Date.now()+S.lunch*60000);note('🍽 Almuerzo',`Vuelves a las ${ft(p2(rt.getHours())+':'+p2(rt.getMinutes()))} · ${S.lunch} min`,'almuerzo-ini')}}
  else{openDay(today());const e=D.segs.findIndex(g=>!g.i&&!g.o);if(e>=0)D.segs[e].i=hm;else D.segs.push({i:hm,o:''});S.lastOut=null;saveDraft();R();toast('Entrada marcada ✓ · '+ft(hm))}}
 function checkFx(){if(RM)return;const d=document.createElement('div');d.className='ckfx';d.innerHTML='<svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M14 27l8 8 16-17"/></svg>';document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
 function shake(){document.querySelectorAll('.seg').forEach(x=>{x.classList.remove('shk');void x.offsetWidth;x.classList.add('shk')})}
@@ -343,6 +353,12 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
 <label style="margin-top:12px">Se aplica a</label><select id="md"><option value="seg" ${S.mode==='seg'?'selected':''}>Cada turno (entrada a huella de cierre)</option><option value="day" ${S.mode==='day'?'selected':''}>El total del día</option></select>
 <div class="hint n">Siempre se redondea hacia abajo: 1 h 45 min cuenta como 1 h 30 min.</div>
 <label style="margin-top:12px">Duración del almuerzo (minutos)</label><input id="lm" type="number" inputmode="numeric" min="0" max="180" value="${S.lunch}"><div class="hint n">Se usa en la cuenta regresiva del botón de marcar. Pon 0 para quitarla.</div>`;
+ const avisos=(()=>{const ok=canNote(),pm=ok?Notification.permission:'none',on=S.notif&&pm==='granted';
+ let b;if(!ok)b='<div class="hint n">Este navegador no permite avisos. En iPhone funcionan solo con la app instalada (iOS 16.4 o más).</div>';
+ else if(pm==='denied')b='<div class="hint n">Bloqueaste los avisos. Actívalos en los Ajustes del celular → Notificaciones → Mis Horas.</div>';
+ else if(on)b='<div class="row" style="margin:0"><button class="pri" data-a="ntt">Probar aviso</button><button class="ghost" style="margin:0;width:auto" data-a="nt0">Desactivar</button></div>';
+ else b='<button class="pri" style="width:100%" data-a="nt1">Activar avisos</button>';
+ return b+'<div class="hint n" style="margin-top:12px">Al marcar tu salida a almuerzo te llega un aviso con la hora de regreso. Al terminar el almuerzo suena otro aviso mientras la app siga abierta o en segundo plano. Si la cierras del todo, ese último aviso puede no llegar.</div>'})();
  const look=`<label>Tema de color</label><div class="sw">${PRE.map((p,i)=>`<button class="sb${ti===i?' on':''}" data-a="th" data-n="${i}" style="background:linear-gradient(135deg,${p.a1},${p.a2})">${p.n}</button>`).join('')}</div>
 <div class="tr" style="margin-top:12px"><div><label>Color 1</label><input type="color" id="c1" value="${t.a1}"></div><div><label>Color 2</label><input type="color" id="c2" value="${t.a2}"></div></div>
 <label style="margin-top:12px">Modo</label><select id="lk">${[['auto','Automático (como tu celular)'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<option value="${v}" ${(S.look||'auto')===v?'selected':''}>${l}</option>`).join('')}</select>`;
@@ -355,6 +371,7 @@ function vCfg(){const rs=[...S.rates].sort((a,b)=>a.from<b.from?1:-1),t=S.th||PR
  const tl=`<div class="tl">${NOV.map((n,i)=>`<div class="ti"><span class="tdot${i?'':' now'}"></span><div class="tb"><div class="tv"><b>v${n.v}</b>${i?'':'<em>Actual</em>'}<span>${n.t}</span></div><ul>${n.i.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('')}</div>`;
  return acc('pago','💵','Pago y descuentos',cr?`${$r(cr)} por hora${dsc()?` · descuentos ${dsc()}%`:''}`:'Pon tu valor por hora',pago)
  +acc('regla','⏱','Regla de la empresa',`Bloques de ${S.step===1?'tiempo exacto':S.step===60?'1 hora':S.step+' min'} · ${S.mode==='seg'?'por turno':'por día'}`,regla)
+ +acc('avisos','🔔','Avisos del almuerzo',S.notif&&canNote()&&Notification.permission==='granted'?'Activados ✓':'Desactivados',avisos)
  +acc('look','🎨','Apariencia',`${t.n||'Personalizado'} · ${({auto:'Automático',light:'Claro',dark:'Oscuro'})[S.look||'auto']}`,look)
  +acc('pers','👤','Personalizar',S.name?esc(S.name):'Nombre, hora, tamaño y montos',pers)
  +acc('inst','📲','Instalar la app',inApp()?'Ya está instalada ✓':'Cómo añadirla a tu pantalla de inicio',inApp()?'<div class="hint n">Ya la estás usando como app. Si un amigo quiere instalarla, usa Invitar amigos.</div>':steps())
@@ -369,7 +386,7 @@ function R(){const n=new Date();
 <main${ANIM?` class="an ${DIR}"`:''}>${rateFor(today())||!S.onbDone?'':'<div class="warn">Primero pon tu valor por hora. <button class="lnk" data-a="ob" data-s="pago">Configurar</button></div>'}${ok?'':'<div class="warn">⚠ Este navegador no permite guardar aquí. Usa Ajustes → Exportar para no perder tus horas.</div>'}${T==='reg'?vReg():T==='mes'?vMes():vCfg()}</main>
 <nav><i class="pill" style="--x:${PT}"></i>${[['reg','⏱','Registrar'],['mes','📅','Mes'],['cfg','⚙️','Ajustes']].map(([t,i,l])=>`<button data-a="t" data-t="${t}" class="${T===t?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav>`;
  if(T==='reg')paint();clock();if(ANIM)cu();ANIM=false;DIR='';POPM=false;const ti=({reg:0,mes:1,cfg:2})[T],pl=$('.pill'),tb=$('#topb');if(pl&&PT!==ti)requestAnimationFrame(()=>requestAnimationFrame(()=>pl.style.setProperty('--x',ti)));PT=ti;if(tb)tb.classList.toggle('on',scrollY>110)}
-function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12});const c=$('#tbc');if(c)c.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:!!S.h12});mkTick()}
+function clock(){const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:!!S.h12});const c=$('#tbc');if(c)c.textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:!!S.h12});lunchCheck();mkTick()}
 setInterval(clock,1000);
 
 function dl(name,txt,type){try{const f=new File([txt],name,{type});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(()=>{});return}}catch(e){}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
@@ -387,6 +404,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  else if(a==='now'){const d=new Date();D.segs[n][b.dataset.f]=p2(d.getHours())+':'+p2(d.getMinutes());saveDraft();R()}
  else if(a==='nv'){NV=!NV;const m=$('#nvm');if(m)m.classList.toggle('open',NV);b.setAttribute('aria-expanded',NV);const c=b.querySelector('.nvc');if(c)c.textContent=NV?'Ocultar':'Leer más'}
  else if(a==='mk'){ripple(b,e);setTimeout(doMark,170)}
+ else if(a==='nt1')askNote()
+ else if(a==='nt0'){S.notif=false;sv();R()}
+ else if(a==='ntt')note('🔔 Prueba','Así se verán tus avisos del almuerzo','prueba')
  else if(a==='gx'){S.guideOff=true;sv();R()}
  else if(a==='gi'){if(DP){DP.prompt();DP.userChoice.finally(()=>{DP=null;R()})}}
  else if(a==='mkend'){S.lastOut=null;sv();mkTick()}
